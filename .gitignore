@@ -1,0 +1,6 @@
+# Ignore IDE project settings at the monorepo root
+.idea/
+
+# macOS Finder metadata
+.DS_Store
+
