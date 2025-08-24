@@ -5,5 +5,8 @@
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.7"
   }
 }
