@@ -1,6 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, Response, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -19,15 +18,15 @@ ACCESS_TOKEN_COOKIE_NAME = "access_token"  # cookie name for browsers
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/signin", auto_error=False)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False)
 
 # Pydantic models
 class UserSignup(BaseModel):
-    email: str
     name: str
+    email: str
     password: str
 
-class UserSignin(BaseModel):
+class UserLogin(BaseModel):
     email: str
     password: str
 
@@ -110,8 +109,8 @@ def signup(user_data: UserSignup):
     }
     return {"message": "User created successfully"}
 
-@router.post("/signin", response_model=Token)
-def signin(response: Response, request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
+@router.post("/login", response_model=Token)
+def login(response: Response, request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
     """
     Returns a JWT as 'access_token' and also sets it as an HttpOnly cookie.
     - Browsers: cookie is used automatically (ensure requests send cookies).
@@ -148,8 +147,8 @@ def me(current_user: Dict[str, Any] = Depends(get_current_user)):
 
 """
 Token usage:
-- Browsers: after POST /auth/signin, the JWT is set as an HttpOnly cookie. Send subsequent requests with cookies included.
-- API clients: read 'access_token' from the signin response and set 'Authorization: Bearer <token>' on protected requests.
+- Browsers: after POST /auth/login, the JWT is set as an HttpOnly cookie. Send subsequent requests with cookies included.
+- API clients: read 'access_token' from the login response and set 'Authorization: Bearer <token>' on protected requests.
 - Swagger UI: click 'Authorize' and paste 'Bearer <token>'.
 - Logout: POST /auth/logout to clear the cookie.
 """

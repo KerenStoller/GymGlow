@@ -7,6 +7,7 @@
     "build": "pnpm -r build"
   },
   "dependencies": {
-    "bootstrap": "^5.3.7"
+    "bootstrap": "^5.3.7",
+    "react-router-dom": "^7.8.2"
   }
 }
