@@ -72,7 +72,7 @@ export default function LoginPage()  {
                     className="form-control"
                 />
                 {loading && <p className="text-primary">Loading...</p>}
-                {errMsg !== '' && <p className="text-danger">{errMsg}</p>}
+                {!loading && errMsg !== '' && <p className="text-danger">{errMsg}</p>}
                 <div>
                     <button className="btn btn-primary" type="submit">Login</button>
                 </div>
