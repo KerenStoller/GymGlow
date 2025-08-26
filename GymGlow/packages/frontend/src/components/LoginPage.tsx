@@ -8,15 +8,15 @@ export default function LoginPage()  {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function login()
     {
+        setLoading(true);
         const url = `${AUTH_BASE}/login`;
         const tempEmail = email;
         const tempPassword = password;
-
-        clearStates();
 
         try
         {
@@ -34,18 +34,14 @@ export default function LoginPage()  {
                 throw new Error(err.detail || 'Invalid credentials');
             }
 
+            setLoading(false);
             navigate('/Home');
         }
         catch(err : any)
         {
-            setMsg(err.message || 'Login failed');
+            setLoading(false);
+            setErrMsg(err.message || 'Login failed');
         }
-    }
-
-    function clearStates()
-    {
-        setEmail('');
-        setPassword('');
     }
 
     return (
@@ -75,7 +71,8 @@ export default function LoginPage()  {
                     onChange={e => setPassword(e.target.value)}
                     className="form-control"
                 />
-                {msg !== '' && <p className="text-danger">{msg}</p>}
+                {loading && <p className="text-primary">Loading...</p>}
+                {errMsg !== '' && <p className="text-danger">{errMsg}</p>}
                 <div>
                     <button className="btn btn-primary" type="submit">Login</button>
                 </div>

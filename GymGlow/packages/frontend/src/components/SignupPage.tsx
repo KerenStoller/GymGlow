@@ -9,16 +9,16 @@ export default function SignupPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [msg, setMsg] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    const [loading, setLoading] = useState(false);
 
     async function signup()
     {
+        setLoading(true);
         const url = `${AUTH_BASE}/signup`;
         const tempName = name;
         const tempEmail = email;
         const tempPassword = password;
-
-        clearStates();
 
         try
         {
@@ -37,19 +37,14 @@ export default function SignupPage() {
                 throw new Error(err.detail || 'Signup failed');
             }
 
+            setLoading(false);
             navigate('/home');
         }
         catch(err : any)
         {
-            setMsg(err.message || 'Signup failed')
+            setLoading(false);
+            setErrMsg(err.message || 'Signup failed')
         }
-    }
-
-    function clearStates()
-    {
-        setName('');
-        setEmail('');
-        setPassword('');
     }
 
     return (
@@ -86,7 +81,8 @@ export default function SignupPage() {
                     onChange={e => setPassword(e.target.value)}
                     className="form-control"
                 />
-                {msg !== '' && <p className="text-danger">{msg}</p>}
+                {loading && <p className="text-primary">Loading...</p>}
+                {errMsg !== '' && <p className="text-danger">{errMsg}</p>}
                 <div>
                     <button className="btn btn-primary" type="submit">Signup</button>
                 </div>
