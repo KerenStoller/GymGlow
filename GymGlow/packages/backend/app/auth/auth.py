@@ -1,5 +1,6 @@
-from fastapi import APIRouter, HTTPException, Depends, Response, Request
+from fastapi import APIRouter, HTTPException, Depends, Response
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
+from uuid import UUID
 #JWT handling
 from jose import JWTError, jwt
 from starlette import status
@@ -7,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 # Database imports and models
 from app.db.crud import get_user_by_email, create_user, verify_user
 from app.db.connection import Session, get_db
-from app.auth.models import User, UserSignup, Token
+from app.auth.models import CurrentUser, UserSignup, Token
 
 # Create router for auth endpoints
 router = APIRouter(prefix="/auth", tags=["auth"])   # tags is used by Swagger UI
@@ -21,40 +22,41 @@ TOKEN_EXPIRE_MINUTES = 30
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=False, scheme_name="JWT")
 
 
-def create_access_token(username: str, user_unique_mail: int):
+def create_access_token(username: str, user_id: UUID):
     #TODO: create cookie with the token
     expires = datetime.now(timezone.utc) + timedelta(minutes=TOKEN_EXPIRE_MINUTES)
-    encode = {"sub": username, "email": user_unique_mail, "exp": expires}
+    encode = {"sub": username, "id": str(user_id), "exp": expires}
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
-async def get_current_user(token: str = Depends(oauth2_bearer)) -> User:
+
+async def get_current_user(token: str = Depends(oauth2_bearer)) -> CurrentUser:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]) # Decode the JWT token
         username: str = payload.get("sub")
-        user_unique_mail: str = payload.get("email")
-        if not username or not user_unique_mail:
+        user_id: str = payload.get("id")
+        if not username or not user_id:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
-        return User(name=username, email=user_unique_mail)
+        return CurrentUser(name=username, id=user_id)
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
 
-@router.post("/signup", response_model=Token)
+@router.post("/signup", status_code=status.HTTP_201_CREATED, response_model=Token)
 async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
     if get_user_by_email(db, user_data.email):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
     user = create_user(db, user_data.name, user_data.email, user_data.password)
-    token = create_access_token(user.name, user.email)
+    token = create_access_token(user.name, user.id)
     return Token(access_token=token, token_type="bearer")
 
 
 # gets token
-@router.post("/login", status_code=status.HTTP_201_CREATED, response_model=Token)
+@router.post("/login", status_code=status.HTTP_202_ACCEPTED, response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = verify_user(db, form_data.username, form_data.password)  # OAuth2 form uses "username" but its my email
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
-    token = create_access_token(user.name, user.email)
+    token = create_access_token(user.name, user.id)
     return Token(access_token=token, token_type="bearer")
 
 

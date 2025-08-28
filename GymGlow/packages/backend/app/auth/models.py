@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
-class User(BaseModel):
+
+class CurrentUser(BaseModel):
     name: str
-    email: str
+    id: str
 
 class UserSignup(BaseModel):
     name: str
