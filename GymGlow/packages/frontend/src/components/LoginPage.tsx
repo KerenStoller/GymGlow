@@ -34,6 +34,8 @@ export default function LoginPage()  {
                 throw new Error(err.detail || 'Invalid credentials');
             }
 
+            console.log(response.body);
+
             setLoading(false);
             navigate('/Home');
         }

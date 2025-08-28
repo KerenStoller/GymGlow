@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from app.auth.auth import router as auth_router
 from fastapi.middleware.cors import CORSMiddleware
+from app.auth.schemas import User
+from app.auth.token import get_current_active_user
 
 app = FastAPI(title="GymGlow API",
     description="Backend API for GymGlow monorepo",
@@ -19,7 +21,12 @@ app.add_middleware(
 app.include_router(auth_router)
 
 @app.get("/health")
-def health():
+def health(user: User = Depends(get_current_active_user)):
+    if user.disabled:
+        #TODO: log in
+        return {"status": "403 - Forbidden"}
+    if not user:
+        return {"status": "401 - Unauthorized"}
     return {"status": "200 - ok"}
 
 @app.get("/")
