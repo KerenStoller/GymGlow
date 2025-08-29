@@ -1,34 +1,55 @@
-import { useNavigate } from 'react-router-dom';
-//TODO: Use environment variable for AUTH_BASE
-const AUTH_BASE = 'http://localhost:8000/auth';
+import {useState} from 'react';
+import {useNavigate, useLoaderData} from "react-router-dom";
 
-const HomePage = () => {
-
+const HomePage = () =>
+{
     const navigate = useNavigate();
+    const [result, setResult] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false);
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
-    async function logout()
+    const token = useLoaderData();
+
+    function logout()
     {
-        const url = `${AUTH_BASE}/logout`;
+        localStorage.removeItem("token");
+        navigate("/auth");
+    }
+
+    async function health()
+    {
+        setLoading(true);
+        const url = 'http://localhost:8000/health';
+
         try
         {
-            const response = await fetch(url,
-                {
-                    method: 'POST',
-                    credentials: 'include'
-                });
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {'Authorization': `Bearer ${token}`}})
 
-            if (!response.ok)
+            if(!response.ok)
             {
                 const err = await response.json().catch(() => ({}));
-                if (response.status === 404) throw new Error('Signup endpoint not found');
-                throw new Error(err.detail || 'Signup failed');
+                if (response.status === 404)
+                {
+                    throw new Error('endpoint not found');
+                }
+                else
+                {
+                    throw err;
+                }
             }
 
-            navigate('/');
+            const responseJson = await response.json();
+            setResult(JSON.stringify(responseJson));
+            setLoading(false);
         }
-        catch (error ) {
-            console.error("Logout failed", error);
+        catch (error)
+        {
+            setLoading(false);
+            setErrorMsg('Action failed');
         }
+
     }
 
     return (
@@ -39,8 +60,18 @@ const HomePage = () => {
                     style={{ marginBottom: 12 }}
                 >
                     Logout
-                </button>
+            </button>
             <h1>Home Page - User is logged in</h1>
+            <button
+                    className="btn btn-success"
+                    onClick={() => health()}
+                    style={{ marginBottom: 12 }}
+                >
+                    Health
+            </button>
+            {<p>{result}</p>}
+            {loading && <p>Loading...</p>}
+            {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
         </>
     );
 };

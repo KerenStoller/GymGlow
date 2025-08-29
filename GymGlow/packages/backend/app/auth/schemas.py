@@ -1,4 +1,6 @@
 from pydantic import BaseModel
+
+
 #TODO: add fields
 
 class UserSignup(BaseModel):
