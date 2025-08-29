@@ -15,4 +15,3 @@ class Token(BaseModel):
 class User(BaseModel):
     name: str
     id: str
-    disabled: bool | None = None

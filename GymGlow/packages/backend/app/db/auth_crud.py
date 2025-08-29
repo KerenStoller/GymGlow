@@ -1,5 +1,3 @@
-import uuid
-
 from app.db.connection import Session
 from app.db.models import User
 from passlib.context import CryptContext

@@ -16,10 +16,18 @@ const HomePage = () =>
         navigate("/auth");
     }
 
-    async function health()
+    interface WorkoutPlan
+    {
+        id: string;
+        user_id: string;
+        name: string;
+        description: string | null;
+    }
+
+    async function getWorkouts()
     {
         setLoading(true);
-        const url = 'http://localhost:8000/health';
+        const url = 'http://localhost:8000/workouts';
 
         try
         {
@@ -40,9 +48,19 @@ const HomePage = () =>
                 }
             }
 
-            const responseJson = await response.json();
-            setResult(JSON.stringify(responseJson));
-            setLoading(false);
+            const workouts: WorkoutPlan[] = await response.json();
+
+            if (workouts.length === 0)
+            {
+                setResult("You have no workouts yet.");
+                setLoading(false);
+                return;
+            }
+            else
+            {
+                setResult(workouts[0].name);
+                setLoading(false);
+            }
         }
         catch (error)
         {
@@ -64,10 +82,10 @@ const HomePage = () =>
             <h1>Home Page - User is logged in</h1>
             <button
                     className="btn btn-success"
-                    onClick={() => health()}
+                    onClick={() => getWorkouts()}
                     style={{ marginBottom: 12 }}
                 >
-                    Health
+                    My Workouts
             </button>
             {<p>{result}</p>}
             {loading && <p>Loading...</p>}

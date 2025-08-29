@@ -1,10 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
-from app.db.crud import get_user_by_email, create_user, verify_user
+from app.db.auth_crud import get_user_by_email, create_user, verify_user
 from app.db.connection import Session, get_db
-from app.auth.schemas import UserSignup, Token
-from app.auth.token import create_access_token
+from app.endpoints.auth.schemas import UserSignup, Token
+from app.endpoints.auth.token import create_access_token
 
 # Create router for auth endpoints
 router = APIRouter(prefix="/auth", tags=["auth"])   # tags is used by Swagger UI
