@@ -8,7 +8,6 @@ import Layout from "./components/Layout";
 export const router = createBrowserRouter([
     {path: "/", element: <Layout />, children: [
         {index: true, element: <LandingPage />},
-        {path: "auth", element: <LandingPage /> },
         {path: "home", loader: createTokenLoader(), element: <HomePage />},
-        {path: "*", loader: () => redirect("/auth") },]},
+        {path: "*", loader: () => redirect("/") },]},
 ]);

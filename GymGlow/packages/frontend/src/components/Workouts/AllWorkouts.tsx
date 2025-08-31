@@ -1,23 +1,17 @@
-import {useState} from 'react';
-import {useNavigate, useLoaderData} from "react-router-dom";
-import type {WorkoutPlanDTO} from "../types/workoutPlanResponse.ts";
-import {API} from "../utils/emdpoints.ts"
+/*
+import {useState} from "react";
+import {useLoaderData} from "react-router-dom";
+import {API} from "../../utils/emdpoints.ts";
+import type {WorkoutPlanDTO} from "../../types/workoutPlanResponse.ts";
+*/
 
-const HomePage = () =>
-{
-    const navigate = useNavigate();
+const Workouts = () => {
+    /*
     const [result, setResult] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>('');
 
     const token = useLoaderData();
-
-    function logout()
-    {
-        localStorage.removeItem("token");
-        navigate("/");
-    }
-
     async function getWorkouts()
     {
         setLoading(true);
@@ -63,29 +57,12 @@ const HomePage = () =>
         }
 
     }
-
+    */
     return (
-        <>
-            <button
-                    className="btn btn-outline-secondary btn-sm"
-                    onClick={() => logout()}
-                    style={{ marginBottom: 12 }}
-                >
-                    Logout
-            </button>
-            <h1>Home Page - User is logged in</h1>
-            <button
-                    className="btn btn-success"
-                    onClick={() => getWorkouts()}
-                    style={{ marginBottom: 12 }}
-                >
-                    My Workouts
-            </button>
-            {<p>{result}</p>}
-            {loading && <p>Loading...</p>}
-            {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
-        </>
+        <div>
+
+        </div>
     );
 };
 
-export default HomePage;
+export default Workouts;

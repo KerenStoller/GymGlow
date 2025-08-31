@@ -8,7 +8,7 @@ export const createTokenLoader = () =>
 
         if (!token)
         {
-            return redirect('/auth');
+            return redirect('/');
         }
 
         return token;

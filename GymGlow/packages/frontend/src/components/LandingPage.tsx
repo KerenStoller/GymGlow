@@ -1,8 +1,6 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-
-//TODO: Use environment variable for AUTH_BASE
-const AUTH_BASE = 'http://localhost:8000/auth';
+import {API} from "../utils/emdpoints.ts";
 
 const LandingPage = () =>
 {
@@ -61,7 +59,7 @@ const LandingPage = () =>
         event.preventDefault();
         setLoading(true);
 
-        let url = AUTH_BASE;
+        let url = API.AUTH.LOGIN;
         let fetchBody: RequestInit = {
             method: "POST",
             headers: {},
@@ -71,13 +69,12 @@ const LandingPage = () =>
 
         if (mode === "Login")
         {
-            url += '/login';
             fetchBody.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
             fetchBody.body = new URLSearchParams({username: email, password: password}).toString();
         }
         else if (mode === "Signup")
         {
-            url += '/signup';
+            url = API.AUTH.SIGNUP;
             fetchBody.headers = { 'Content-Type': 'application/JSON' };
             fetchBody.body = JSON.stringify({ name: name, email: email, password: password });
         }

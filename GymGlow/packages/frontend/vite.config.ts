@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+        /*
       // Forward auth and health requests to FastAPI on 8000
       '/auth': {
         target: 'http://localhost:8000',
@@ -14,7 +15,7 @@ export default defineConfig({
       '/health': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-      },
-    }
+      },*/
+    },
   }
 })
