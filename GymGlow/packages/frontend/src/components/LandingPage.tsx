@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {API} from "../utils/emdpoints.ts";
+import cuteKoalaPic from '../assets/cute-koala.jpg';
 
 const LandingPage = () =>
 {
@@ -83,70 +84,87 @@ const LandingPage = () =>
     }
 
     return (
-        <>
-            {mode === "" && (
-                <>
-                    <h1 className="display-6">Welcome!</h1>
-                    <div style={{ display: "flex", gap: 8 }}>
-                        <button className="btn btn-primary" onClick={() => setMode("Login")}>
-                            Login
-                        </button>
-                        <button className="btn btn-primary" onClick={() => setMode("Signup")}>
-                            Signup
-                        </button>
-                    </div>
-                </>
-            )}
-            {mode !== "" && (
-                <>
-                    <button
-                        className="btn btn-outline-secondary btn-sm"
-                        onClick={() => {setMode(""); clearStates();}}
-                        style={{ marginBottom: 12 }}>
-                        Back
-                    </button>
+        <div className="container-fluid p-0">
+            <div className="row g-0 min-vh-90">
+                {/* Left Side: Form */}
+                 <div className="col-md-6 d-flex flex-column justify-content-center align-items-center text-center">
+                     {mode === "" && (
+                        <>
+                            <h1 className="m-0 text-primary">Welcome!</h1>
+                            <div style={{ display: "flex", gap: 8 }}>
+                                <button className="btn btn-primary" onClick={() => setMode("Login")}>
+                                    Login
+                                </button>
+                                <button className="btn btn-primary" onClick={() => setMode("Signup")}>
+                                    Signup
+                                </button>
+                            </div>
+                        </>
+                    )}
+                    {mode !== "" && (
+                        <>
+                            <button
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => {setMode(""); clearStates();}}
+                                style={{ marginBottom: 12 }}>
+                                Back
+                            </button>
 
-                    <h2>{mode}</h2>
-                    <form onSubmit={(e) => handleSubmit(e)}
-                        className="auth-form"
-                        style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '10px',
-                        maxWidth: '300px'
-                        }}>
-                        {mode === "Signup" && (
-                            <input
-                                type="text"
-                                placeholder="Name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
+                            <h2>{mode}</h2>
+                            <form onSubmit={(e) => handleSubmit(e)}
+                                className="auth-form"
+                                style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '10px',
+                                maxWidth: '300px'
+                                }}>
+                                {mode === "Signup" && (
+                                    <input
+                                        type="text"
+                                        placeholder="Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="form-control"
+                                        required={true}
+                                    />
+                                )}
+                                <input
+                                type="email"
+                                placeholder="Email"
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 className="form-control"
-                            />
-                        )}
-                        <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        className="form-control"
-                        />
-                        <input
-                            type="password"
-                            placeholder="Password"
-                            value={password}
-                            onChange={e => setPassword(e.target.value)}
-                            className="form-control"
-                        />
-                        {loading && <p className="text-primary">Loading...</p>}
-                        {!loading && errMsg !== '' && <p className="text-danger">{errMsg}</p>}
-                        <div>
-                            <button className="btn btn-primary" type="submit">Signup</button>
-                        </div>
-                    </form>
-                </>
-            )}
-        </>
+                                required={true}
+                                />
+                                <input
+                                    type="password"
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    className="form-control"
+                                    required={true}
+                                />
+                                {loading && <p className="text-primary">Loading...</p>}
+                                {!loading && errMsg !== '' && <p className="text-danger">{errMsg}</p>}
+                                <div>
+                                    <button className="btn btn-primary" type="submit">{mode}</button>
+                                </div>
+                            </form>
+                        </>
+                    )}
+                </div>
+
+                {/* Right Side: Image */}
+                <div className="col-md-6 d-none d-md-block p-0">
+                    <img src={cuteKoalaPic}
+                         alt="Landing visual"
+                         className="img-fluid h-90 w-90 object-fit-cover"
+                         style={{ objectFit: 'cover' }}
+                    />
+                </div>
+            </div>
+        </div>
     );
 
 };

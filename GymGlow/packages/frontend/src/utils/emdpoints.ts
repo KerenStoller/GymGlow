@@ -8,5 +8,7 @@ export const API =
     },
     WORKOUT_PLANS: {
         GET_ALL: `${BASE_URL}/workouts`,
+        GET_EXAMPLE: `${BASE_URL}/workouts/example`,
+        CREATE: `${BASE_URL}/workouts/create`,
     }
 }

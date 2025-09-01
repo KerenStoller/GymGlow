@@ -6,7 +6,7 @@
 
 ---
 
-## How Keren Runs the App
+## How I Run the App
 
 1. **Open Terminal** and go to the root folder:
 
