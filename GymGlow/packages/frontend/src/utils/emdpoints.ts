@@ -10,5 +10,7 @@ export const API =
         GET_ALL: `${BASE_URL}/workouts`,
         GET_EXAMPLE: `${BASE_URL}/workouts/example`,
         CREATE: `${BASE_URL}/workouts/create`,
+        DELETE: `${BASE_URL}/workouts/delete`,
+        UPDATE: `${BASE_URL}/workouts/update`,
     }
 }

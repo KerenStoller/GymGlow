@@ -13,6 +13,7 @@ def init_db():
     import app.db.models # Ensure models are imported so that they are registered with Base
     Base.metadata.create_all(bind=engine)
 
+
 init_db()
 
 def get_db():

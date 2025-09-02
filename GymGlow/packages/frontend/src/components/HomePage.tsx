@@ -2,10 +2,10 @@ import {useState} from 'react';
 import {useLoaderData} from "react-router-dom";
 import type {WorkoutPlanDTO} from "../types/workoutPlanResponse.ts";
 import WorkoutTabButton from './Workouts/WorkoutTabButton.tsx';
-import WorkoutCard from './Workouts/WorkoutCard.tsx';
 import {API} from "../utils/emdpoints.ts"
 import WorkoutList from "./Workouts/WorkoutList.tsx";
 import WorkoutForm from "./Workouts/WorkoutForm.tsx";
+import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
 
 const HomePage = () =>
 {
@@ -16,7 +16,7 @@ const HomePage = () =>
     const [showAllWorkouts, setShowAllWorkouts] = useState<boolean>(false);
     const [showExample, setShowExample] = useState<boolean>(false);
     const [allWorkoutsFetched, setAllWorkoutsFetched] = useState<WorkoutPlanDTO[]>([]);
-    const [exampleFetched, setExampleFetched] = useState<WorkoutPlanDTO>();
+    const [exampleFetched, setExampleFetched] = useState<WorkoutPlanDTO[]>();
     const [createSuccess, setCreateSuccess] = useState<boolean>(false);
 
     const token = useLoaderData();
@@ -51,7 +51,6 @@ const HomePage = () =>
 
     async function getAllWorkouts()
     {
-        setErrorMsg('');
         setLoading(true);
         const url = API.WORKOUT_PLANS.GET_ALL;
         const options = {
@@ -75,7 +74,7 @@ const HomePage = () =>
         setLoading(false);
     }
 
-    async function createNewWorkout(title: string, description: string)
+    async function createNewWorkout(new_workout: WorkoutPlanRequest)
     {
         setErrorMsg('');
         setLoading(true);
@@ -85,7 +84,7 @@ const HomePage = () =>
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json',},
-            body: JSON.stringify({name: title, description: description}),
+            body: JSON.stringify({name: new_workout.title, description: new_workout.description}),
         };
 
         const response = await callBackend(url, options);
@@ -100,7 +99,6 @@ const HomePage = () =>
 
     async function getExample()
     {
-        setErrorMsg('');
         if(exampleFetched)
         {
             setShowExample(true);
@@ -128,6 +126,59 @@ const HomePage = () =>
             }
         }
 
+        console.log(response);
+
+        setLoading(false);
+    }
+
+    async function deleteWorkout(workout_id: string)
+    {
+        setLoading(true);
+
+        const url = API.WORKOUT_PLANS.DELETE + `/${workout_id}`;
+        const options = {
+            method: 'DELETE',
+            headers: {'Authorization': `Bearer ${token}`}
+        };
+
+        const response = await callBackend(url, options);
+
+        if (response && response.ok)
+        {
+            setAllWorkoutsFetched(allWorkoutsFetched.filter(workout => workout.id !== workout_id));
+        }
+
+        setLoading(false);
+    }
+
+    async function editWorkout(workout_id: string, new_workout: WorkoutPlanRequest)
+    {
+        const {title, description} = new_workout;
+
+        setLoading(true);
+
+        console.log(workout_id);
+
+        const url = API.WORKOUT_PLANS.UPDATE + `/${workout_id}`;
+        const options = {
+            method: 'PUT',
+            headers: {'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',},
+            body: JSON.stringify({name: title, description: description}),
+        };
+
+        const response = await callBackend(url, options);
+
+        if (response && response.ok)
+        {
+            setAllWorkoutsFetched(allWorkoutsFetched.map(workout => {
+                if (workout.id === workout_id) {
+                    return {...workout, name: title, description: description};
+                }
+                return workout;
+            }));
+        }
+
         setLoading(false);
     }
 
@@ -137,24 +188,24 @@ const HomePage = () =>
                 <h3 className="m-0 text-primary">Let’s Get Moving!</h3>
                 <menu>
                     <WorkoutTabButton
-                        onSelect={() => {getAllWorkouts(); setSelectedTab("All Workouts")}}
+                        onSelect={() => {getAllWorkouts(); setSelectedTab("All Workouts"); setErrorMsg('');}}
                         isSelected={selectedTab === "All Workouts"}
                     >my workouts</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {setCreateSuccess(false); setSelectedTab("New Workout")}}
+                        onSelect={() => {setCreateSuccess(false); setSelectedTab("New Workout"); setErrorMsg('');}}
                         isSelected={NewWorkout}
                     >create a new workout</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {getExample(); setSelectedTab("Example")}}
+                        onSelect={() => {getExample(); setSelectedTab("Example"); setErrorMsg('');}}
                         isSelected={selectedTab === "Example"}
                     >favorite workout of the day</WorkoutTabButton>
                 </menu>
             </section>
             <section id="results">
-                { selectedTab === "All Workouts" && showAllWorkouts && <WorkoutList workoutList={allWorkoutsFetched}/>}
-                { NewWorkout && !createSuccess && <WorkoutForm functionOnSubmit={createNewWorkout}/>}
+                { selectedTab === "All Workouts" && showAllWorkouts && <WorkoutList workoutList={allWorkoutsFetched} handleDelete={deleteWorkout} handleUpdate={editWorkout}/>}
+                { NewWorkout && <WorkoutForm functionOnSubmit={createNewWorkout}/>}
                 { NewWorkout && createSuccess && <p style={{ color: 'green' }}>Workout created successfully!</p>}
-                { selectedTab === "Example" && showExample && <WorkoutCard {...exampleFetched!}/>}
+                { selectedTab === "Example" && showExample && <WorkoutList workoutList={exampleFetched!}/>}
             </section>
             {loading && <p>Loading...</p>}
             {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}

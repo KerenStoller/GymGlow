@@ -10,6 +10,9 @@ def hash_password(password: str) -> str:
 def get_user_by_email(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
+def check_for_admin(db: Session):
+    return db.query(User).filter(User.email == "admin@admin").first()
+
 def create_user(db: Session, name: str, email: str, password: str):
     db_user = User(name=name, email=email, hashed_password=hash_password(password))
     db.add(db_user)
