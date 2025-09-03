@@ -13,3 +13,14 @@ class WorkoutPlanSchema(BaseModel):
 class WorkoutPlanCreateSchema(BaseModel):
     name: str
     description: str
+
+class ExerciseSchema(BaseModel):
+    id: UUID
+    name: str
+    description: str
+    muscle_group: str
+    equipment: str
+    tips: str
+
+    class Config:
+        orm_mode = True

@@ -7,9 +7,10 @@ from app.db.workouts_crud import (get_workouts_by_user,
                                 create_workout as create_workout_db,
                                 get_workouts_by_admin,
                                 delete_workout as delete_workout_db,
-                                update_workout as update_workout_db)
+                                update_workout as update_workout_db,
+                                get_all_exercises as get_all_exercises_db)
 from app.db.connection import Session
-from app.endpoints.workouts.schemas import WorkoutPlanSchema, WorkoutPlanCreateSchema
+from app.endpoints.workouts.schemas import WorkoutPlanSchema, WorkoutPlanCreateSchema, ExerciseSchema
 
 router = APIRouter(prefix="/workouts", tags=["workouts"])
 
@@ -33,3 +34,7 @@ async def delete_workout(workout_id: UUID, user: User = Depends(get_current_user
 @router.put("/update/{workout_id}", status_code=204)
 async def update_workout(workout_id: UUID, new_workout: WorkoutPlanCreateSchema, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     update_workout_db(db, user, workout_id, new_workout.name, new_workout.description)
+
+@router.get("/all_exercises", status_code=200, response_model=list[ExerciseSchema])
+async def get_all_exercises(db: Session = Depends(get_db)):
+    return get_all_exercises_db(db)

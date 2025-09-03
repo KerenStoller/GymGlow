@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {API} from "../utils/emdpoints.ts";
+import {callBackend} from "../utils/callBackend.ts";
 import cuteKoalaPic from '../assets/cute-koala.jpg';
 
 const LandingPage = () =>
@@ -21,44 +22,27 @@ const LandingPage = () =>
         setPassword('');
     }
 
-    async function callBackend(url: string, fetchBody: RequestInit)
-    {
-        try
-        {
-            const response = await fetch(url, fetchBody);
-            clearStates();
-
-            if (!response.ok)
-            {
-                const err = await response.json().catch(() => ({}));
-                if (response.status === 404)
-                {
-                    throw new Error('endpoint not found');
-                }
-                else
-                {
-                    throw err;
-                }
-            }
-
-            // save token
-            const resData = await response.json();
-            localStorage.setItem('token', resData.access_token);
-
-            setLoading(false);
-            navigate('/home');
-        }
-        catch (error: any) //TODO: Narrow down error type
-        {
-            setLoading(false);
-            setErrMsg(error.detail || `${mode} failed`);
-        }
-    }
-
     async function handleSubmit(event: React.FormEvent)
     {
         event.preventDefault();
         setLoading(true);
+
+        // get admin id if not already in local storage
+        if(!localStorage.getItem('adminId'))
+        {
+            const responseAdminId = await callBackend(API.AUTH.ADMIN, { method: "GET" }, setErrMsg);
+            if(responseAdminId && responseAdminId.ok)
+            {
+                const resData = await responseAdminId.json();
+                localStorage.setItem('adminId', resData.admin_id);
+            }
+            else
+            {
+                setErrMsg("Failed to get admin ID");
+                setLoading(false);
+                return;
+            }
+        }
 
         let url = API.AUTH.LOGIN;
         let fetchBody: RequestInit = {
@@ -80,7 +64,19 @@ const LandingPage = () =>
             fetchBody.body = JSON.stringify({ name: name, email: email, password: password });
         }
 
-        await callBackend(url, fetchBody);
+        clearStates();
+        const response = await callBackend(url, fetchBody, setErrMsg);
+
+        console.log('back from backend', response);
+        if(response && response.ok)
+        {
+            // save token
+            const resData = await response.json();
+            localStorage.setItem('token', resData.access_token);
+            navigate('/home');
+        }
+
+        setLoading(false);
     }
 
     return (

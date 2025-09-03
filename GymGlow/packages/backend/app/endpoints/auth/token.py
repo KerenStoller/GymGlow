@@ -14,7 +14,7 @@ oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=True, sc
 # JWT Configuration
 SECRET_KEY = "a988e0c55ed641253b883db4302adcb474a7ed5b5a2575a4a68f3f77ee442504"
 ALGORITHM = "HS256"
-TOKEN_EXPIRE_MINUTES = 30
+TOKEN_EXPIRE_MINUTES = 1
 
 def create_access_token(username: str, user_id: UUID):
     expires = datetime.now(timezone.utc) + timedelta(minutes=TOKEN_EXPIRE_MINUTES)

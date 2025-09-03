@@ -1,5 +1,5 @@
-from app.db.connection import Session
-from app.db.models import WorkoutPlan
+from app.db.db_session import Session
+from app.db.models import WorkoutPlan, Exercise
 from app.db.models import User
 from app.endpoints.auth.schemas import User as AuthUser
 from uuid import UUID
@@ -38,7 +38,6 @@ def delete_workout(db: Session, user: AuthUser, workout_id: UUID):
         db.delete(workout)
         db.commit()
 
-
 def update_workout(db: Session, user: AuthUser, workout_id: UUID, name: str, description: str):
     user_id = UUID(user.id)
     workout = db.query(WorkoutPlan).filter(WorkoutPlan.id == workout_id, WorkoutPlan.user_id == user_id).first()
@@ -47,3 +46,6 @@ def update_workout(db: Session, user: AuthUser, workout_id: UUID, name: str, des
         workout.description = description
         db.commit()
         db.refresh(workout)
+
+def get_all_exercises(db: Session):
+    return db.query(Exercise).all()

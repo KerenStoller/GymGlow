@@ -1,18 +1,16 @@
 import {useState} from 'react';
-import type {WorkoutPlanDTO} from "../../types/workoutPlanResponse.ts";
+import type {WorkoutDTO} from "../../types/WorkoutDTO.ts";
 import type {WorkoutPlanRequest} from "../../types/WorkoutPlanRequest.ts";
 import WorkoutForm from "./WorkoutForm.tsx";
-//TODO: update adminId dynamically
-const adminId = '3a9083c2-c28e-4740-a5ed-4569a24e8ecf';
 
 type Props = {
-    workoutDetails: WorkoutPlanDTO;
+    workoutDetails: WorkoutDTO;
     onDelete?: (id: string) => Promise<void>;
     onUpdate?: (id: string, workout_plan:WorkoutPlanRequest) => Promise<void>;
 }
 
 const WorkoutCard : React.FC<Props> = ({workoutDetails, onDelete, onUpdate}) => {
-    const isExampleWorkout = workoutDetails.user_id === adminId;
+    const isExampleWorkout = workoutDetails.user_id === localStorage.getItem('adminId');
     const [updateMode, setUpdateMode] = useState<boolean>(false);
     const modalId = `workoutModal-${workoutDetails.id}`;
 

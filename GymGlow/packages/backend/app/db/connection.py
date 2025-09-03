@@ -1,18 +1,22 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from app.db.base import Base
+from app.db.db_session import Session, engine
+from app.db.seed.exercises import get_default_exercises
+from app.db.auth_crud import create_admin_user
 
-DATABASE_URL = "sqlite:///./myDB.db"
-
-#TODO: when we move to production, update this.
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False}, echo = True)
-Session = sessionmaker(bind=engine)
-
-Base = declarative_base()
+def seed_exercises(session: Session):
+    from app.db.models import Exercise
+    if not session.query(Exercise).first():  # Only seed if table is empty
+        exercises = get_default_exercises()
+        session.add_all(exercises)
+        session.commit()
 
 def init_db():
-    import app.db.models # Ensure models are imported so that they are registered with Base
+    import app.db.models  # Ensure models are imported so that they are registered with Base
     Base.metadata.create_all(bind=engine)
-
+    session = Session()
+    seed_exercises(session)
+    create_admin_user(session)
+    session.close()
 
 init_db()
 

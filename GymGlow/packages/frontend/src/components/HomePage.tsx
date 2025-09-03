@@ -1,85 +1,66 @@
 import {useState} from 'react';
 import {useLoaderData} from "react-router-dom";
-import type {WorkoutPlanDTO} from "../types/workoutPlanResponse.ts";
 import WorkoutTabButton from './Workouts/WorkoutTabButton.tsx';
 import {API} from "../utils/emdpoints.ts"
-import WorkoutList from "./Workouts/WorkoutList.tsx";
+import {callBackend} from "../utils/callBackend.ts";
+import WorkoutOrExerciseList from "./Workouts/WorkoutOrExerciseList.tsx";
 import WorkoutForm from "./Workouts/WorkoutForm.tsx";
 import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
+import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
+import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
 
 const HomePage = () =>
 {
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>('');
-    const [selectedTab, setSelectedTab] = useState<"" | "All Workouts" | "New Workout" | "Example">("");
+    const [selectedTab, setSelectedTab] = useState<"" | "All Workouts" | "New Workout" | "Example" | "Exercises">("");
     const NewWorkout = selectedTab === "New Workout";
     const [showAllWorkouts, setShowAllWorkouts] = useState<boolean>(false);
     const [showExample, setShowExample] = useState<boolean>(false);
-    const [allWorkoutsFetched, setAllWorkoutsFetched] = useState<WorkoutPlanDTO[]>([]);
-    const [exampleFetched, setExampleFetched] = useState<WorkoutPlanDTO[]>();
+    const [showExercises, setShowExercises] = useState<boolean>(false);
+    const [allWorkoutsFetched, setAllWorkoutsFetched] = useState<WorkoutDTO[]>([]);
+    const [exampleFetched, setExampleFetched] = useState<WorkoutDTO[]>([]);
+    const [exercisesFetched, setExercisesFetched] = useState<ExerciseDTO[]>([]);
     const [createSuccess, setCreateSuccess] = useState<boolean>(false);
 
     const token = useLoaderData();
 
-
-    async function callBackend(url: string, options: RequestInit)
+    async function getAndSetDataFromResponse(
+        response: Response | undefined,
+        setFunction:  React.Dispatch<React.SetStateAction<WorkoutDTO[]>>,
+        setShow: React.Dispatch<React.SetStateAction<boolean>>)
     {
-        try
-        {
-            const response = await fetch(url, options);
-
-            if(!response.ok)
-            {
-                const err = await response.json().catch(() => ({}));
-                if (response.status === 404)
-                {
-                    throw new Error('endpoint not found');
-                }
-                else
-                {
-                    throw err;
-                }
-            }
-
-            return response;
-        }
-        catch (e)
-        {
-            setErrorMsg('Action failed');
-        }
-    }
-
-    async function getAllWorkouts()
-    {
-        setLoading(true);
-        const url = API.WORKOUT_PLANS.GET_ALL;
-        const options = {
-            method: 'GET',
-            headers: {'Authorization': `Bearer ${token}`}
-        };
-
-        const response = await callBackend(url, options);
+        // response can be undefined if there was a network error
         if (response && response.ok)
         {
             try
             {
-                setAllWorkoutsFetched(await response.json());
-                setShowAllWorkouts(true);
+                setFunction(await response.json());
+                setShow(true);
             }
             catch (e)
             {
                 setErrorMsg('Action failed');
             }
         }
+    }
+
+    async function getAllWorkouts() {
+        setLoading(true);
+        const options = {
+            method: 'GET',
+            headers: {'Authorization': `Bearer ${token}`}
+        };
+
+        const response = await callBackend(API.WORKOUT_PLANS.GET_ALL, options, setErrorMsg);
+        getAndSetDataFromResponse(response, setAllWorkoutsFetched, setShowAllWorkouts);
         setLoading(false);
     }
 
-    async function createNewWorkout(new_workout: WorkoutPlanRequest)
-    {
+    async function createNewWorkout(new_workout: WorkoutPlanRequest) {
         setErrorMsg('');
         setLoading(true);
 
-        const url = API.WORKOUT_PLANS.CREATE;
         const options = {
             method: 'POST',
             headers: {'Authorization': `Bearer ${token}`,
@@ -87,9 +68,8 @@ const HomePage = () =>
             body: JSON.stringify({name: new_workout.title, description: new_workout.description}),
         };
 
-        const response = await callBackend(url, options);
-
-        if (response && response.status === 201)
+        const response = await callBackend(API.WORKOUT_PLANS.CREATE, options, setErrorMsg);
+        if (response && response.ok)
         {
             setCreateSuccess(true);
         }
@@ -97,42 +77,23 @@ const HomePage = () =>
         setLoading(false);
     }
 
-    async function getExample()
-    {
-        if(exampleFetched)
+    async function getExample() {
+        if(exampleFetched.length > 0)
         {
             setShowExample(true);
             return;
         }
 
         setLoading(true);
+        const options = {   method: 'GET',  };
 
-        const url = API.WORKOUT_PLANS.GET_EXAMPLE;
-        const options = {
-            method: 'GET',
-        };
-
-        const response = await callBackend(url, options);
-        if (response && response.ok)
-        {
-            try
-            {
-                setExampleFetched(await response.json());
-                setShowExample(true);
-            }
-            catch (e)
-            {
-                setErrorMsg('Action failed');
-            }
-        }
-
-        console.log(response);
-
+        const response = await callBackend(API.WORKOUT_PLANS.GET_EXAMPLE, options, setErrorMsg);
+        getAndSetDataFromResponse(response, setExampleFetched, setShowExample);
         setLoading(false);
     }
 
-    async function deleteWorkout(workout_id: string)
-    {
+    async function deleteWorkout(workout_id: string) {
+        setErrorMsg('');
         setLoading(true);
 
         const url = API.WORKOUT_PLANS.DELETE + `/${workout_id}`;
@@ -141,8 +102,7 @@ const HomePage = () =>
             headers: {'Authorization': `Bearer ${token}`}
         };
 
-        const response = await callBackend(url, options);
-
+        const response = await callBackend(url, options, setErrorMsg);
         if (response && response.ok)
         {
             setAllWorkoutsFetched(allWorkoutsFetched.filter(workout => workout.id !== workout_id));
@@ -151,13 +111,10 @@ const HomePage = () =>
         setLoading(false);
     }
 
-    async function editWorkout(workout_id: string, new_workout: WorkoutPlanRequest)
-    {
-        const {title, description} = new_workout;
-
+    async function editWorkout(workout_id: string, new_workout: WorkoutPlanRequest) {
+        setErrorMsg('');
         setLoading(true);
-
-        console.log(workout_id);
+        const {title, description} = new_workout;
 
         const url = API.WORKOUT_PLANS.UPDATE + `/${workout_id}`;
         const options = {
@@ -167,8 +124,7 @@ const HomePage = () =>
             body: JSON.stringify({name: title, description: description}),
         };
 
-        const response = await callBackend(url, options);
-
+        const response = await callBackend(url, options, setErrorMsg);
         if (response && response.ok)
         {
             setAllWorkoutsFetched(allWorkoutsFetched.map(workout => {
@@ -182,30 +138,57 @@ const HomePage = () =>
         setLoading(false);
     }
 
+    async function getExercises(){
+        setLoading(true);
+        const options = {   method: 'GET',  };
+        const response = await callBackend(API.WORKOUT_PLANS.GET_ALL_EXERCISES, options, setErrorMsg);
+
+        if (response && response.ok)
+        {
+            try
+            {
+                setExercisesFetched(await response.json());
+                setShowExercises(true);
+            }
+            catch (e)
+            {
+                setErrorMsg('Action failed');
+            }
+        }
+        //getAndSetDataFromResponse(response, setExercisesFetched, setShowExercises);
+
+        setLoading(false);
+    }
+
     return (
         <>
             <section id="workouts tab buttons options">
                 <h3 className="m-0 text-primary">Let’s Get Moving!</h3>
                 <menu>
                     <WorkoutTabButton
-                        onSelect={() => {getAllWorkouts(); setSelectedTab("All Workouts"); setErrorMsg('');}}
+                        onSelect={() => {setErrorMsg(''); getAllWorkouts(); setSelectedTab("All Workouts");}}
                         isSelected={selectedTab === "All Workouts"}
                     >my workouts</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {setCreateSuccess(false); setSelectedTab("New Workout"); setErrorMsg('');}}
+                        onSelect={() => {setErrorMsg(''); setCreateSuccess(false); setSelectedTab("New Workout");}}
                         isSelected={NewWorkout}
                     >create a new workout</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {getExample(); setSelectedTab("Example"); setErrorMsg('');}}
+                        onSelect={() => {setErrorMsg(''); getExample(); setSelectedTab("Example");}}
                         isSelected={selectedTab === "Example"}
-                    >favorite workout of the day</WorkoutTabButton>
+                    >Workout examples</WorkoutTabButton>
+                    <WorkoutTabButton
+                        onSelect={() => {setErrorMsg(''); getExercises(); setSelectedTab("Exercises");}}
+                        isSelected={selectedTab === "Exercises"}
+                    >Exercises</WorkoutTabButton>
                 </menu>
             </section>
             <section id="results">
-                { selectedTab === "All Workouts" && showAllWorkouts && <WorkoutList workoutList={allWorkoutsFetched} handleDelete={deleteWorkout} handleUpdate={editWorkout}/>}
+                { selectedTab === "All Workouts" && showAllWorkouts && <WorkoutOrExerciseList list={allWorkoutsFetched} handleDelete={deleteWorkout} handleUpdate={editWorkout}/>}
                 { NewWorkout && <WorkoutForm functionOnSubmit={createNewWorkout}/>}
                 { NewWorkout && createSuccess && <p style={{ color: 'green' }}>Workout created successfully!</p>}
-                { selectedTab === "Example" && showExample && <WorkoutList workoutList={exampleFetched!}/>}
+                { selectedTab === "Example" && showExample && <WorkoutOrExerciseList list={exampleFetched!}/>}
+                { selectedTab === "Exercises" && showExercises && <WorkoutOrExerciseList list={exercisesFetched!}/>}
             </section>
             {loading && <p>Loading...</p>}
             {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
