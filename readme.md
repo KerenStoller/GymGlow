@@ -26,7 +26,6 @@ pnpm -r --parallel dev
 
 3. **Check endpoints:**
 
-- Backend health: [http://localhost:8000/health](http://localhost:8000/health)
 - API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Frontend app: [http://localhost:5173](http://localhost:5173)
 
