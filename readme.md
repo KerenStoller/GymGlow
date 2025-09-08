@@ -13,9 +13,9 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 ---
 
 ## Project Structure
-packages/
-  backend/   # FastAPI backend
-  frontend/  # React frontend
+# packages/
+#   backend/   # FastAPI backend
+#   frontend/  # React frontend
 
 ---
 
