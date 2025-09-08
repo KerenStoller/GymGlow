@@ -1,14 +1,14 @@
 # GymGlow 
-This repository is organized as a monorepo containing both the FastAPI backend and React frontend.
 
 ### A fitness management platform built with FastAPI (backend) and React (frontend) that enables users to securely register, log in, create personalized workout plans, and track their progress over time. Designed with a responsive interface, GymGlow delivers a smooth, intuitive experience backed by robust authentication and clean client–server integration.
+This repository is organized as a monorepo containing both the FastAPI backend and React frontend.
 
 ---
 
 ## Tech Stack
-**Backend:** FastAPI running in Python 3.11 virtual environment (`packages/backend/venv`), served by Uvicorn.
-**Frontend:** React (Vite + TypeScript) app running on Node 18+ via pnpm (`packages/frontend`).
-**Authentication:** JWT with refresh tokens
+- **Backend:** FastAPI running in Python 3.11 virtual environment (`packages/backend/venv`), served by Uvicorn.
+- **Frontend:** React (Vite + TypeScript) app running on Node 18+ via pnpm (`packages/frontend`).
+- **Authentication:** JWT with refresh tokens
 
 ---
 
