@@ -1,12 +1,25 @@
-# GymGlow Monorepo
+# GymGlow 
+This repository is organized as a monorepo containing both the FastAPI backend and React frontend.
 
-**Backend:** FastAPI running in Python 3.11 virtual environment (`packages/backend/venv`), served by Uvicorn.
-
-**Frontend:** React (Vite + TypeScript) app running on Node 18+ via pnpm (`packages/frontend`).
+### A fitness management platform built with FastAPI (backend) and React (frontend) that enables users to securely register, log in, create personalized workout plans, and track their progress over time. Designed with a responsive interface, GymGlow delivers a smooth, intuitive experience backed by robust authentication and clean client–server integration.
 
 ---
 
-## How Keren Runs the App
+## Tech Stack
+**Backend:** FastAPI running in Python 3.11 virtual environment (`packages/backend/venv`), served by Uvicorn.
+**Frontend:** React (Vite + TypeScript) app running on Node 18+ via pnpm (`packages/frontend`).
+**Authentication:** JWT with refresh tokens
+
+---
+
+## Project Structure
+packages/
+  backend/   # FastAPI backend
+  frontend/  # React frontend
+
+---
+
+## Getting Started
 
 1. **Open Terminal** and go to the root folder:
 
@@ -19,10 +32,8 @@ cd GymGlowProject/GymGlow
 ```bash
 pnpm -r --parallel dev
 ```
-
-- This uses the `dev` scripts in both `packages/backend` and `packages/frontend`.
-- Backend will start on [http://localhost:8000](http://localhost:8000)
-- Frontend will start on [http://localhost:5173](http://localhost:5173)
+- Backend: [http://localhost:8000](http://localhost:8000)
+- Frontend: [http://localhost:5173](http://localhost:5173)
 
 3. **Check endpoints:**
 
@@ -31,7 +42,7 @@ pnpm -r --parallel dev
 
 ---
 
-## First‑time Setup (only once)
+## First‑time Setup
 
 ### Backend
 
