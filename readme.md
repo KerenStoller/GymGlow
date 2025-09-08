@@ -12,15 +12,6 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 
 ---
 
-## Project Structure
-<p>
-  packages/  
-&nbsp;&nbsp;&nbsp;&nbsp;backend/   # FastAPI backend  
-&nbsp;&nbsp;&nbsp;&nbsp;frontend/  # React frontend  
-</p>
-
----
-
 ## Getting Started
 
 1. **Open Terminal** and go to the root folder:
