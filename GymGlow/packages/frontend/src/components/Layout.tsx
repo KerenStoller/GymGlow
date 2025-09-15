@@ -14,6 +14,7 @@ export default function Layout() {
     function logout()
     {
         localStorage.removeItem("token");
+        localStorage.removeItem("refresh_token");
         setLoggedIn(false);
         window.location.href = "/";
     }

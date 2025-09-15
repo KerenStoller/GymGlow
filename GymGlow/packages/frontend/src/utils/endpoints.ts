@@ -6,6 +6,7 @@ export const API =
         LOGIN: `${BASE_URL}/auth/login`,
         SIGNUP: `${BASE_URL}/auth/signup`,
         ADMIN: `${BASE_URL}/auth/admin`,
+        REFRESH: `${BASE_URL}/auth/refresh`,
     },
     WORKOUT_PLANS: {
         GET_ALL: `${BASE_URL}/workouts`,

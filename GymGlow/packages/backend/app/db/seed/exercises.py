@@ -1,3 +1,13 @@
+from sqlalchemy.orm import Session
+from app.db.models import Exercise
+
+def seed_exercises(session: Session):
+    if not session.query(Exercise).first():  # Only seed if table is empty
+        exercises = get_default_exercises()
+        session.add_all(exercises)
+        session.commit()
+
+
 def get_default_exercises():
     from app.db.models import Exercise
     from uuid import uuid4

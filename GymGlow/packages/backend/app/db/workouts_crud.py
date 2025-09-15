@@ -1,4 +1,4 @@
-from app.db.db_session import Session
+from sqlalchemy.orm import Session
 from app.db.models import WorkoutPlan, Exercise
 from app.db.models import User
 from app.endpoints.auth.schemas import User as AuthUser
@@ -16,6 +16,7 @@ def get_workouts_by_admin(db: Session):
     return db.query(WorkoutPlan).filter(WorkoutPlan.user_id == admin_id).all()
 
 def create_workout(db: Session, user: AuthUser, name: str, description: str):
+    print("in create_workout")
     user_id = UUID(user.id)
     new_workout = WorkoutPlan(user_id=user_id, name=name, description=description)
     db.add(new_workout)

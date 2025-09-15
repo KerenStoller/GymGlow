@@ -1,6 +1,6 @@
-import {useState} from "react";
+import {useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
-import {API} from "../utils/emdpoints.ts";
+import {API} from "../utils/endpoints.ts";
 import {callBackend} from "../utils/callBackend.ts";
 import cuteKoalaPic from '../assets/cute-koala.jpg';
 
@@ -10,16 +10,15 @@ const LandingPage = () =>
     const [mode, setMode] = useState<"" | "Login" | "Signup">("");
     const [loading, setLoading] = useState(false);
     const [errMsg, setErrMsg] = useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const name = useRef<HTMLInputElement>(null);
+    const email = useRef<HTMLInputElement>(null);
+    const password = useRef<HTMLInputElement>(null);
 
-    function clearStates()
-    {
+    function clearStates() {
         setErrMsg('');
-        setName('');
-        setEmail('');
-        setPassword('');
+        if (name.current) name.current.value = '';
+        if (email.current) email.current.value = '';
+        if (password.current) password.current.value = '';
     }
 
     async function handleSubmit(event: React.FormEvent)
@@ -55,24 +54,25 @@ const LandingPage = () =>
         if (mode === "Login")
         {
             fetchBody.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-            fetchBody.body = new URLSearchParams({username: email, password: password}).toString();
+            fetchBody.body = new URLSearchParams({username: email.current!.value, password: password.current!.value}).toString();
         }
         else if (mode === "Signup")
         {
             url = API.AUTH.SIGNUP;
             fetchBody.headers = { 'Content-Type': 'application/JSON' };
-            fetchBody.body = JSON.stringify({ name: name, email: email, password: password });
+            fetchBody.body = JSON.stringify({ name: name.current!.value, email: email.current!.value, password: password.current!.value });
         }
 
         clearStates();
         const response = await callBackend(url, fetchBody, setErrMsg);
 
-        console.log('back from backend', response);
         if(response && response.ok)
         {
-            // save token
+            // TODO: need to add try catch here?
+            // saving tokens
             const resData = await response.json();
             localStorage.setItem('token', resData.access_token);
+            localStorage.setItem('refresh_token', resData.refresh_token);
             navigate('/home');
         }
 
@@ -101,7 +101,7 @@ const LandingPage = () =>
                         <>
                             <button
                                 className="btn btn-outline-secondary btn-sm"
-                                onClick={() => {setMode(""); clearStates();}}
+                                onClick={() => {clearStates(); setMode("");}}
                                 style={{ marginBottom: 12 }}>
                                 Back
                             </button>
@@ -119,8 +119,7 @@ const LandingPage = () =>
                                     <input
                                         type="text"
                                         placeholder="Name"
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
+                                        ref={name}
                                         className="form-control"
                                         required={true}
                                     />
@@ -128,16 +127,14 @@ const LandingPage = () =>
                                 <input
                                 type="email"
                                 placeholder="Email"
-                                value={email}
-                                onChange={e => setEmail(e.target.value)}
+                                ref={email}
                                 className="form-control"
                                 required={true}
                                 />
                                 <input
                                     type="password"
                                     placeholder="Password"
-                                    value={password}
-                                    onChange={e => setPassword(e.target.value)}
+                                    ref={password}
                                     className="form-control"
                                     required={true}
                                 />

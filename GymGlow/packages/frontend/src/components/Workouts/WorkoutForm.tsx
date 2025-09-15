@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef } from 'react';
 import type {WorkoutPlanRequest} from "../../types/WorkoutPlanRequest.ts";
 
 type WorkoutFormProps = {
@@ -8,16 +8,16 @@ type WorkoutFormProps = {
 }
 
 const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, mode, inModal}) => {
-    const [title, setTitle] = useState<string>('');
-    const [description, setDescription] = useState<string>('');
+    const title = useRef<HTMLInputElement>(null);
+    const description = useRef<HTMLInputElement>(null);
 
     const buttonText = mode ? 'Update Workout' : 'Create Workout';
 
     function handleSubmit(event: React.FormEvent) {
         event.preventDefault();
-        functionOnSubmit({ title, description });
-        setTitle('');
-        setDescription('');
+        functionOnSubmit({ title: title.current!.value, description: description.current!.value });
+        title.current!.value = '';
+        description.current!.value = '';
     }
 
     return (
@@ -41,16 +41,14 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, mode, inMod
                 }}>
                 <input
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    ref={title}
                     placeholder="Workout Title"
                     className="form-control"
                     required={true}
                 />
                 <input
                     type="text"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    ref={description}
                     placeholder="Workout Description"
                     className="form-control"
                     required={true}

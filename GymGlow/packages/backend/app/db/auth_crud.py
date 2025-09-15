@@ -1,4 +1,4 @@
-from app.db.db_session import Session
+from sqlalchemy.orm import Session
 from app.db.models import User
 from passlib.context import CryptContext
 from app.db.workouts_crud import create_admin_workout

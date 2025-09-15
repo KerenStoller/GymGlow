@@ -1,7 +1,8 @@
 import {useState} from 'react';
-import {useLoaderData} from "react-router-dom";
+//import {useLoaderData} from "react-router-dom";
+// delete loader?
 import WorkoutTabButton from './Workouts/WorkoutTabButton.tsx';
-import {API} from "../utils/emdpoints.ts"
+import {API} from "../utils/endpoints.ts"
 import {callBackend} from "../utils/callBackend.ts";
 import WorkoutOrExerciseList from "./Workouts/WorkoutOrExerciseList.tsx";
 import WorkoutForm from "./Workouts/WorkoutForm.tsx";
@@ -22,8 +23,6 @@ const HomePage = () =>
     const [exampleFetched, setExampleFetched] = useState<WorkoutDTO[]>([]);
     const [exercisesFetched, setExercisesFetched] = useState<ExerciseDTO[]>([]);
     const [createSuccess, setCreateSuccess] = useState<boolean>(false);
-
-    const token = useLoaderData();
 
     async function getAndSetDataFromResponse(
         response: Response | undefined,
@@ -49,11 +48,11 @@ const HomePage = () =>
         setLoading(true);
         const options = {
             method: 'GET',
-            headers: {'Authorization': `Bearer ${token}`}
+            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`},
         };
 
         const response = await callBackend(API.WORKOUT_PLANS.GET_ALL, options, setErrorMsg);
-        getAndSetDataFromResponse(response, setAllWorkoutsFetched, setShowAllWorkouts);
+        await getAndSetDataFromResponse(response, setAllWorkoutsFetched, setShowAllWorkouts);
         setLoading(false);
     }
 
@@ -63,7 +62,7 @@ const HomePage = () =>
 
         const options = {
             method: 'POST',
-            headers: {'Authorization': `Bearer ${token}`,
+            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json',},
             body: JSON.stringify({name: new_workout.title, description: new_workout.description}),
         };
@@ -99,7 +98,7 @@ const HomePage = () =>
         const url = API.WORKOUT_PLANS.DELETE + `/${workout_id}`;
         const options = {
             method: 'DELETE',
-            headers: {'Authorization': `Bearer ${token}`}
+            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`,}
         };
 
         const response = await callBackend(url, options, setErrorMsg);
@@ -119,7 +118,7 @@ const HomePage = () =>
         const url = API.WORKOUT_PLANS.UPDATE + `/${workout_id}`;
         const options = {
             method: 'PUT',
-            headers: {'Authorization': `Bearer ${token}`,
+            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`,
                         'Content-Type': 'application/json',},
             body: JSON.stringify({name: title, description: description}),
         };

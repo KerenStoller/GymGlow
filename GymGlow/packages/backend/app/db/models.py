@@ -1,5 +1,5 @@
 from uuid import uuid4
-from app.db.base import Base
+from app.db.setup.base import Base
 from sqlalchemy.dialects.postgresql import UUID  # if using Postgres
 from sqlalchemy import Column, String, ForeignKey
 
