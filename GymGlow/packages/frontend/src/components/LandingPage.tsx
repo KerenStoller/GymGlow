@@ -1,8 +1,9 @@
-import {useState, useRef} from "react";
+import {useState, useRef, useContext} from "react";
 import {useNavigate} from "react-router-dom";
 import {API} from "../utils/endpoints.ts";
 import {callBackend} from "../utils/callBackend.ts";
 import cuteKoalaPic from '../assets/cute-koala.jpg';
+import {TokenContext} from "../store/token-context.tsx";
 
 const LandingPage = () =>
 {
@@ -13,6 +14,7 @@ const LandingPage = () =>
     const name = useRef<HTMLInputElement>(null);
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
+    const {setAccess, setRefresh} = useContext(TokenContext);
 
     function clearStates() {
         setErrMsg('');
@@ -71,8 +73,8 @@ const LandingPage = () =>
             // TODO: need to add try catch here?
             // saving tokens
             const resData = await response.json();
-            localStorage.setItem('token', resData.access_token);
-            localStorage.setItem('refresh_token', resData.refresh_token);
+            setAccess(resData.access_token);
+            setRefresh(resData.refresh_token);
             navigate('/home');
         }
 

@@ -1,20 +1,20 @@
-import { Outlet, useLocation } from "react-router-dom";
-import {useState, useEffect} from "react";
+import { Outlet } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import cuteKoalaRunningPic from '../assets/cute-koala-running.jpg';
+import { TokenContext } from "../store/token-context.tsx";
 
 export default function Layout() {
-    const location = useLocation();
     const [loggedIn, setLoggedIn] = useState<boolean>(!!localStorage.getItem("token"));
+    const {access, setAccess, setRefresh} = useContext(TokenContext);
 
-    //TODO: understand why useEffect is needed here or if there's a better way (context?)
     useEffect(() => {
-        setLoggedIn(!!localStorage.getItem("token"));
-    }, [location]);
+        setLoggedIn(access !== "");
+    }, [access])
 
     function logout()
     {
-        localStorage.removeItem("token");
-        localStorage.removeItem("refresh_token");
+        setAccess('');
+        setRefresh('');
         setLoggedIn(false);
         window.location.href = "/";
     }
