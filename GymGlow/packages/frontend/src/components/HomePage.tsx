@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import {useState} from 'react';
 import WorkoutTabButton from './Workouts/WorkoutTabButton.tsx';
 import {API} from "../utils/endpoints.ts"
 import {callBackend} from "../utils/callBackend.ts";
@@ -7,7 +7,7 @@ import WorkoutForm from "./Workouts/WorkoutForm.tsx";
 import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
 import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
 import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
-import {TokenContext} from "../store/token-context.tsx";
+import useTokens from "../hooks/useTokens.ts";
 
 const HomePage = () =>
 {
@@ -22,7 +22,7 @@ const HomePage = () =>
     const [exampleFetched, setExampleFetched] = useState<WorkoutDTO[]>([]);
     const [exercisesFetched, setExercisesFetched] = useState<ExerciseDTO[]>([]);
     const [createSuccess, setCreateSuccess] = useState<boolean>(false);
-    const {access} = useContext(TokenContext);
+    const {access} = useTokens();
 
     async function getAndSetDataFromResponse(
         response: Response | undefined,

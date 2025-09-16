@@ -1,9 +1,9 @@
-import {useState, useRef, useContext} from "react";
+import {useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {API} from "../utils/endpoints.ts";
 import {callBackend} from "../utils/callBackend.ts";
 import cuteKoalaPic from '../assets/cute-koala.jpg';
-import {TokenContext} from "../store/token-context.tsx";
+import useTokens from "../hooks/useTokens.ts";
 
 const LandingPage = () =>
 {
@@ -14,7 +14,7 @@ const LandingPage = () =>
     const name = useRef<HTMLInputElement>(null);
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
-    const {setAccess, setRefresh} = useContext(TokenContext);
+    const {setAccess, setRefresh} = useTokens();
 
     function clearStates() {
         setErrMsg('');

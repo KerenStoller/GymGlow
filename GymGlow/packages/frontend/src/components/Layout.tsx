@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import cuteKoalaRunningPic from '../assets/cute-koala-running.jpg';
-import { TokenContext } from "../store/token-context.tsx";
+import useTokens from "../hooks/useTokens.ts";
 
 export default function Layout() {
     const [loggedIn, setLoggedIn] = useState<boolean>(!!localStorage.getItem("token"));
-    const {access, setAccess, setRefresh} = useContext(TokenContext);
+    const {access, setAccess, setRefresh} = useTokens();
 
     useEffect(() => {
         setLoggedIn(access !== "");
