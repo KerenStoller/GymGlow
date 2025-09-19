@@ -1,8 +1,14 @@
-from uuid import UUID, uuid4
-from app.db.connection import Base
+from uuid import uuid4
+from app.db.setup.base import Base
 from sqlalchemy.dialects.postgresql import UUID  # if using Postgres
 from sqlalchemy import Column, String, ForeignKey
 
+class RefreshToken(Base):
+    __tablename__ = "refresh_tokens"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id = Column(ForeignKey("users.id"), nullable=False)
+    token = Column("token", String, nullable=False, unique=True)
+    #expiry = Column("expiry", String, nullable=True)  # Optional: to track expiry time
 
 class User(Base):
     __tablename__ = "users"
@@ -16,10 +22,10 @@ class Exercise(Base):
     __tablename__ = "exercises"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     name = Column("name", String, nullable=False)
-    description = Column("description", String, nullable=True)
-    muscle_group = Column("muscle_group", String, nullable=True)
+    description = Column("description", String, nullable=False)
+    muscle_group = Column("muscle_group", String, nullable=False)
     equipment = Column("equipment", String, nullable=True)
-    image = Column("image", String, nullable=True)
+    tips = Column("tips", String, nullable=True)
 
 
 class WorkoutPlan(Base):
