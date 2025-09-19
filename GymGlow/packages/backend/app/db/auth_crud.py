@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from app.db.models import User
+from app.db.models import RefreshToken
 from passlib.context import CryptContext
 from app.db.workouts_crud import create_admin_workout
 #password hashing
@@ -39,3 +40,23 @@ def get_admin_id(db: Session):
         create_admin_user(db)
         admin = db.query(User).filter(User.email == "admin@admin").first()
     return {"admin_id": admin.id}
+
+def save_refresh_token(db: Session, token: str, user_id):
+    new_token_to_db = RefreshToken(user_id=user_id, token=token)
+    db.add(new_token_to_db)
+    db.commit()
+    db.refresh(new_token_to_db)
+    return
+
+def validate_refresh_token(db: Session, token: str, user_id):
+    refresh_token_db_entry = db.query(RefreshToken).filter(RefreshToken.token == token).first()
+    if not refresh_token_db_entry or refresh_token_db_entry.user_id != user_id:
+        raise Exception("Invalid refresh token")
+    return True
+
+def delete_refresh_token(db: Session, token: str):
+    refresh_token_db_entry = db.query(RefreshToken).filter(RefreshToken.token == token).first()
+    if refresh_token_db_entry:
+        db.delete(refresh_token_db_entry)
+        db.commit()
+    return

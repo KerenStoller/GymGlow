@@ -1,26 +1,29 @@
 import { createContext, useState } from 'react';
+import ExpiredRefresh from "../components/ExpiredRefreshModal.tsx";
 
 type TokenContextType = {
-    access: string;
+    accessToken: string;
     setAccess: React.Dispatch<React.SetStateAction<string>>;
-    refresh: string;
-    setRefresh: React.Dispatch<React.SetStateAction<string>>;
+    gotRefresh: boolean;
+    setGotRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const TokenContext = createContext<TokenContextType>({
-    access: '',
+    accessToken: '',
     setAccess: () => {},    // You can keep empty functions here as placeholders
-    refresh: '',
-    setRefresh: () => {},
+    gotRefresh: false,
+    setGotRefresh: () => {},
 });
 
 const TokenContextProvider : React.FC<React.PropsWithChildren<{}>> = ({ children }) =>
 {
-    const [access, setAccess] = useState('');
-    const [refresh, setRefresh] = useState('');
+    const [accessToken, setAccess] = useState('');
+    const [gotRefresh, setGotRefresh] = useState(false);
+
 
     return (
-        <TokenContext.Provider value={{access, setAccess, refresh, setRefresh}}>
+        <TokenContext.Provider value={{accessToken, setAccess, gotRefresh, setGotRefresh}}>
+            {!gotRefresh && accessToken !== '' && <ExpiredRefresh />}
             {children}
         </TokenContext.Provider>)
 }

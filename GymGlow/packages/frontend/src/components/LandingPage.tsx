@@ -1,8 +1,8 @@
 import {useState, useRef} from "react";
 import {useNavigate} from "react-router-dom";
 import {API} from "../utils/endpoints.ts";
-import {callBackend} from "../utils/callBackend.ts";
 import cuteKoalaPic from '../assets/cute-koala.jpg';
+import axios from '../api/axios.ts';
 import useTokens from "../hooks/useTokens.ts";
 
 const LandingPage = () =>
@@ -14,7 +14,7 @@ const LandingPage = () =>
     const name = useRef<HTMLInputElement>(null);
     const email = useRef<HTMLInputElement>(null);
     const password = useRef<HTMLInputElement>(null);
-    const {setAccess, setRefresh} = useTokens();
+    const {setAccess, setGotRefresh} = useTokens();
 
     function clearStates() {
         setErrMsg('');
@@ -31,51 +31,67 @@ const LandingPage = () =>
         // get admin id if not already in local storage
         if(!localStorage.getItem('adminId'))
         {
-            const responseAdminId = await callBackend(API.AUTH.ADMIN, { method: "GET" }, setErrMsg);
-            if(responseAdminId && responseAdminId.ok)
+            try
             {
-                const resData = await responseAdminId.json();
-                localStorage.setItem('adminId', resData.admin_id);
+                const responseAdminId = await axios.get(API.AUTH.ADMIN);
+                localStorage.setItem('adminId', responseAdminId.data.admin_id);
             }
-            else
+            catch (e: any)
             {
-                setErrMsg("Failed to get admin ID");
+                setErrMsg(e.message);
                 setLoading(false);
                 return;
             }
         }
 
-        let url = API.AUTH.LOGIN;
-        let fetchBody: RequestInit = {
-            method: "POST",
-            headers: {},
-            credentials: "include",
-            body: "",
-        };
-
-        if (mode === "Login")
+        try
         {
-            fetchBody.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
-            fetchBody.body = new URLSearchParams({username: email.current!.value, password: password.current!.value}).toString();
+            let response;
+
+            if (mode === "Login")
+            {
+                const params = new URLSearchParams({
+                    username: email.current!.value,
+                    password: password.current!.value,});
+                response = await axios.post(
+                    API.AUTH.LOGIN,
+                    params,
+                    {
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        withCredentials: true
+                    });
+            }
+            if (mode === "Signup")
+            {
+                response = await axios.post(
+                    API.AUTH.SIGNUP,
+                    { name: name.current!.value, email: email.current!.value, password: password.current!.value },
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        withCredentials: true
+                    });
+            }
+
+            clearStates();
+
+            if (response) // adding this check to satisfy typescript
+            {
+                //console.log(document.cookie);
+                setAccess(response.data.access_token);
+                setGotRefresh(true);
+                navigate('/home');
+            }
         }
-        else if (mode === "Signup")
+        catch (e: any)
         {
-            url = API.AUTH.SIGNUP;
-            fetchBody.headers = { 'Content-Type': 'application/JSON' };
-            fetchBody.body = JSON.stringify({ name: name.current!.value, email: email.current!.value, password: password.current!.value });
-        }
-
-        clearStates();
-        const response = await callBackend(url, fetchBody, setErrMsg);
-
-        if(response && response.ok)
-        {
-            // TODO: need to add try catch here?
-            // saving tokens
-            const resData = await response.json();
-            setAccess(resData.access_token);
-            setRefresh(resData.refresh_token);
-            navigate('/home');
+            if (e.response.data)
+            {
+                setErrMsg(e.response.data.detail);
+            }
+            else
+            {
+                setErrMsg(e.message);
+            }
         }
 
         setLoading(false);

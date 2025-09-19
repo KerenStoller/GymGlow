@@ -31,8 +31,8 @@ const WorkoutOrExerciseList: React.FC<Props> = ({list, handleDelete, handleUpdat
                                     onDelete={handleDelete}
                                     onUpdate={handleUpdate}/>
                             </div>) :
-                            (<div className="w-100 d-flex justify-content-center">
-                                <ExerciseCard key={workout.id} {...workout} />
+                            (<div className="w-100 d-flex justify-content-center" key={workout.id}>
+                                <ExerciseCard {...workout} />
                             </div>)
                         )}
                 </div>

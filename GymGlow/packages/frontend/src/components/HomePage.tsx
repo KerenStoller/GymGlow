@@ -1,13 +1,13 @@
 import {useState} from 'react';
 import WorkoutTabButton from './Workouts/WorkoutTabButton.tsx';
 import {API} from "../utils/endpoints.ts"
-import {callBackend} from "../utils/callBackend.ts";
 import WorkoutOrExerciseList from "./Workouts/WorkoutOrExerciseList.tsx";
 import WorkoutForm from "./Workouts/WorkoutForm.tsx";
 import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
 import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
 import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
-import useTokens from "../hooks/useTokens.ts";
+import axios from "../api/axios.ts";
+import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
 
 const HomePage = () =>
 {
@@ -22,37 +22,22 @@ const HomePage = () =>
     const [exampleFetched, setExampleFetched] = useState<WorkoutDTO[]>([]);
     const [exercisesFetched, setExercisesFetched] = useState<ExerciseDTO[]>([]);
     const [createSuccess, setCreateSuccess] = useState<boolean>(false);
-    const {access} = useTokens();
-
-    async function getAndSetDataFromResponse(
-        response: Response | undefined,
-        setFunction:  React.Dispatch<React.SetStateAction<WorkoutDTO[]>>,
-        setShow: React.Dispatch<React.SetStateAction<boolean>>)
-    {
-        // response can be undefined if there was a network error
-        if (response && response.ok)
-        {
-            try
-            {
-                setFunction(await response.json());
-                setShow(true);
-            }
-            catch (e)
-            {
-                setErrorMsg('Action failed');
-            }
-        }
-    }
+    const axiosPrivate = useAxiosPrivate();
 
     async function getAllWorkouts() {
         setLoading(true);
-        const options = {
-            method: 'GET',
-            headers: {'Authorization': `Bearer ${access}`},
-        };
 
-        const response = await callBackend(API.WORKOUT_PLANS.GET_ALL, options, setErrorMsg);
-        await getAndSetDataFromResponse(response, setAllWorkoutsFetched, setShowAllWorkouts);
+        try
+        {
+            const response = await axiosPrivate.get(API.WORKOUT_PLANS.GET_ALL);
+            setAllWorkoutsFetched(response.data);
+            setShowAllWorkouts(true);
+        }
+        catch (e: any)
+        {
+            setErrorMsg(e.message);
+        }
+
         setLoading(false);
     }
 
@@ -60,34 +45,45 @@ const HomePage = () =>
         setErrorMsg('');
         setLoading(true);
 
-        const options = {
-            method: 'POST',
-            headers: {'Authorization': `Bearer ${access}`,
-                        'Content-Type': 'application/json',},
-            body: JSON.stringify({name: new_workout.title, description: new_workout.description}),
-        };
-
-        const response = await callBackend(API.WORKOUT_PLANS.CREATE, options, setErrorMsg);
-        if (response && response.ok)
+        try
         {
+            await axiosPrivate.post(
+                API.WORKOUT_PLANS.CREATE,
+                {name: new_workout.title, description: new_workout.description},
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                }
+            )
+
             setCreateSuccess(true);
+        }
+        catch (e: any)
+        {
+            setErrorMsg(e.message);
         }
 
         setLoading(false);
     }
 
     async function getExample() {
-        if(exampleFetched.length > 0)
+        if (exampleFetched.length > 0)
         {
             setShowExample(true);
             return;
         }
 
         setLoading(true);
-        const options = {   method: 'GET',  };
+        try
+        {
+            const response2 = await axios.get(API.WORKOUT_PLANS.GET_EXAMPLE);
+            setExampleFetched(response2.data);
+            setShowExample(true);
+        }
+        catch (e: any)
+        {
+            setErrorMsg(e.message);
+        }
 
-        const response = await callBackend(API.WORKOUT_PLANS.GET_EXAMPLE, options, setErrorMsg);
-        getAndSetDataFromResponse(response, setExampleFetched, setShowExample);
         setLoading(false);
     }
 
@@ -95,16 +91,16 @@ const HomePage = () =>
         setErrorMsg('');
         setLoading(true);
 
-        const url = API.WORKOUT_PLANS.DELETE + `/${workout_id}`;
-        const options = {
-            method: 'DELETE',
-            headers: {'Authorization': `Bearer ${access}`,}
-        };
-
-        const response = await callBackend(url, options, setErrorMsg);
-        if (response && response.ok)
+        try
         {
-            setAllWorkoutsFetched(allWorkoutsFetched.filter(workout => workout.id !== workout_id));
+            await axiosPrivate.delete(
+                API.WORKOUT_PLANS.DELETE + `/${workout_id}`);
+            setAllWorkoutsFetched(allWorkoutsFetched.filter(
+                workout => workout.id !== workout_id));
+        }
+        catch(e: any)
+        {
+            setErrorMsg(e.message);
         }
 
         setLoading(false);
@@ -115,23 +111,25 @@ const HomePage = () =>
         setLoading(true);
         const {title, description} = new_workout;
 
-        const url = API.WORKOUT_PLANS.UPDATE + `/${workout_id}`;
-        const options = {
-            method: 'PUT',
-            headers: {'Authorization': `Bearer ${access}`,
-                        'Content-Type': 'application/json',},
-            body: JSON.stringify({name: title, description: description}),
-        };
-
-        const response = await callBackend(url, options, setErrorMsg);
-        if (response && response.ok)
+        try
         {
+            await axiosPrivate.put(
+                API.WORKOUT_PLANS.UPDATE + `/${workout_id}`,
+                {name: title, description},
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
             setAllWorkoutsFetched(allWorkoutsFetched.map(workout => {
                 if (workout.id === workout_id) {
-                    return {...workout, name: title, description: description};
+                    return {...workout, name: title, description};
                 }
                 return workout;
             }));
+        }
+        catch (e: any)
+        {
+            setErrorMsg(e.message);
         }
 
         setLoading(false);
@@ -139,22 +137,17 @@ const HomePage = () =>
 
     async function getExercises(){
         setLoading(true);
-        const options = {   method: 'GET',  };
-        const response = await callBackend(API.WORKOUT_PLANS.GET_ALL_EXERCISES, options, setErrorMsg);
 
-        if (response && response.ok)
+        try
         {
-            try
-            {
-                setExercisesFetched(await response.json());
-                setShowExercises(true);
-            }
-            catch (e)
-            {
-                setErrorMsg('Action failed');
-            }
+            const response = await axios.get(API.WORKOUT_PLANS.GET_ALL_EXERCISES);
+            setExercisesFetched(response.data);
+            setShowExercises(true);
         }
-        //getAndSetDataFromResponse(response, setExercisesFetched, setShowExercises);
+        catch (e: any)
+        {
+            setErrorMsg(e.message);
+        }
 
         setLoading(false);
     }
@@ -165,19 +158,40 @@ const HomePage = () =>
                 <h3 className="m-0 text-primary">Let’s Get Moving!</h3>
                 <menu>
                     <WorkoutTabButton
-                        onSelect={() => {setErrorMsg(''); getAllWorkouts(); setSelectedTab("All Workouts");}}
+                        onSelect={
+                            async () => {
+                                setErrorMsg('');
+                                await getAllWorkouts();
+                                setSelectedTab('All Workouts');}
+                        }
                         isSelected={selectedTab === "All Workouts"}
                     >my workouts</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {setErrorMsg(''); setCreateSuccess(false); setSelectedTab("New Workout");}}
+                        onSelect={
+                            async () => {
+                                setErrorMsg('');
+                                setCreateSuccess(false);
+                                setSelectedTab("New Workout");}
+                        }
                         isSelected={NewWorkout}
                     >create a new workout</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {setErrorMsg(''); getExample(); setSelectedTab("Example");}}
+                        onSelect={
+                            async () => {
+                                setErrorMsg('');
+                                await getExample();
+                                setSelectedTab("Example");
+                            }
+                        }
                         isSelected={selectedTab === "Example"}
                     >Workout examples</WorkoutTabButton>
                     <WorkoutTabButton
-                        onSelect={() => {setErrorMsg(''); getExercises(); setSelectedTab("Exercises");}}
+                        onSelect={
+                            async () => {
+                                setErrorMsg('');
+                                await getExercises();
+                                setSelectedTab("Exercises");}
+                            }
                         isSelected={selectedTab === "Exercises"}
                     >Exercises</WorkoutTabButton>
                 </menu>
