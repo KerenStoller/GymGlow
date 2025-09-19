@@ -28,7 +28,7 @@ const LandingPage = () =>
         event.preventDefault();
         setLoading(true);
 
-        // get admin id if not already in local storage
+        // get admin id if not already in local storage.
         if(!localStorage.getItem('adminId'))
         {
             try

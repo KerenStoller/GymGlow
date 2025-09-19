@@ -51,6 +51,8 @@ def logout(refresh_token: str = Cookie(None), db: Session = Depends(get_db)):
 
 @router.get("/admin")
 def admin(db: Session = Depends(get_db)):
+    print("Admin endpoint called")
+    print("§§§§§§§§§§§§§§§§§§§§§§§§")
     return get_admin_id(db)
 
 
