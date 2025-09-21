@@ -6,9 +6,8 @@ from jose.exceptions import JWTError, ExpiredSignatureError
 from starlette import status
 from uuid import UUID
 from sqlalchemy.orm import Session
-from app.db.auth_crud import save_refresh_token, validate_refresh_token, delete_refresh_token
+from app.db.crud.auth_crud import save_refresh_token, validate_refresh_token, delete_refresh_token
 
-from app.db.models import Exercise
 from app.endpoints.auth.schemas import User
 
 # auth + token
@@ -18,8 +17,8 @@ oauth2_bearer = OAuth2PasswordBearer(tokenUrl="/auth/login", auto_error=True, sc
 # JWT Configuration
 SECRET_KEY = "a988e0c55ed641253b883db4302adcb474a7ed5b5a2575a4a68f3f77ee442504"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = .25
-REFRESH_TOKEN_EXPIRE_MINUTES = .5
+ACCESS_TOKEN_EXPIRE_MINUTES = 15
+REFRESH_TOKEN_EXPIRE_MINUTES = 60
 
 # error handling
 credentials_exception = HTTPException(

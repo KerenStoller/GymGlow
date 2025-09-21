@@ -1,7 +1,7 @@
 from app.db.setup.base import Base
 from app.db.setup.db_session import SessionFactory, engine
 from app.db.seed.exercises import seed_exercises
-from app.db.auth_crud import create_admin_user
+from app.db.crud.auth_crud import create_admin_user
 
 def init_db():
     Base.metadata.create_all(bind=engine)

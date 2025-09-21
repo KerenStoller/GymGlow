@@ -79,7 +79,7 @@ const LandingPage = () =>
                 //console.log(document.cookie);
                 setAccess(response.data.access_token);
                 setGotRefresh(true);
-                navigate('/home');
+                navigate('/root');
             }
         }
         catch (e: any)

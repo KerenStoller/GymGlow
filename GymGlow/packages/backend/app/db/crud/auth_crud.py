@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from app.db.models import User
 from app.db.models import RefreshToken
 from passlib.context import CryptContext
-from app.db.workouts_crud import create_admin_workout
+from app.db.crud.workouts_crud import create_admin_workout
 #password hashing
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

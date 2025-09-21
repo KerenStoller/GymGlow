@@ -1,4 +1,4 @@
-import type {ExerciseDTO} from "../../types/ExerciseDTO.ts";
+import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
 
 const ExerciseCard = (exercise: ExerciseDTO) => {
     return (

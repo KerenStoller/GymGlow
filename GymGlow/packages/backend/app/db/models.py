@@ -34,4 +34,13 @@ class WorkoutPlan(Base):
     user_id = Column(ForeignKey("users.id"), nullable=False)
     name = Column("name", String, nullable=False)
     description = Column("description", String, nullable=True)
-    #exercises =
+
+
+class WorkoutExercise(Base):
+    __tablename__ = "workout_plan_exercises"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    workout_plan_id = Column(UUID, ForeignKey("workout_plans.id"), nullable=False)
+    exercise_id = Column(UUID, ForeignKey("exercises.id"), nullable=False)
+    sets = Column("sets", String, nullable=True)  # e.g., "3"
+    reps = Column("reps", String, nullable=True)  # e.g., "10-12"
+    weight = Column("weight", String, nullable=True)

@@ -13,6 +13,11 @@ export const API =
         CREATE: `/workouts/create`,
         DELETE: `/workouts/delete`,
         UPDATE: `/workouts/update`,
-        GET_ALL_EXERCISES: `/workouts/all_exercises`,
+    },
+    EXERCISES: {
+        GET_ALL: `/exercises/all_exercises`,
+    },
+    WORKOUT_EXERCISES: {
+        GET_ALL: `/workout_exercises/get_exercises`,
     }
 }

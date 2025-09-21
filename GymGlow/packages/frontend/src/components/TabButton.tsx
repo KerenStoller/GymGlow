@@ -5,7 +5,7 @@ type Props = {
 };
 
 
-const WorkoutTabButton: React.FC<Props> = ({children, onSelect, isSelected}) => {
+const TabButton: React.FC<Props> = ({children, onSelect, isSelected}) => {
     let buttonClass = `btn btn-outline-primary ${isSelected ? 'active' : ''}`;
     return (
         <button  className={buttonClass} style={{ margin: 5 }} onClick={onSelect}>
@@ -14,4 +14,4 @@ const WorkoutTabButton: React.FC<Props> = ({children, onSelect, isSelected}) => 
     );
 };
 
-export default WorkoutTabButton;
+export default TabButton;

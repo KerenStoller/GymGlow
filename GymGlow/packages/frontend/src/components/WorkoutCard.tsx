@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import type {WorkoutDTO} from "../../types/WorkoutDTO.ts";
-import type {WorkoutPlanRequest} from "../../types/WorkoutPlanRequest.ts";
+import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
+import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
 import WorkoutForm from "./WorkoutForm.tsx";
 
 type Props = {
@@ -31,6 +31,7 @@ const WorkoutCard : React.FC<Props> = ({workoutDetails, onDelete, onUpdate}) => 
     }
 
     return (
+
         <div className="card mx-auto"  style = {{ width: '60rem' }}>
             {/* div - button trigger modal */}
             <div className="card-body" role="button" data-bs-toggle="modal" data-bs-target={`#${modalId}`}>
@@ -62,6 +63,7 @@ const WorkoutCard : React.FC<Props> = ({workoutDetails, onDelete, onUpdate}) => 
                 </div>
             </div>
         </div>
+        
     );
 };
 

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.db.models import WorkoutPlan, Exercise
+from app.db.models import WorkoutPlan, Exercise, WorkoutExercise
 from app.db.models import User
 from app.endpoints.auth.schemas import User as AuthUser
 from uuid import UUID
@@ -47,6 +47,3 @@ def update_workout(db: Session, user: AuthUser, workout_id: UUID, name: str, des
         workout.description = description
         db.commit()
         db.refresh(workout)
-
-def get_all_exercises(db: Session):
-    return db.query(Exercise).all()

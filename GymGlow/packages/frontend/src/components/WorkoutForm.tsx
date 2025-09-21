@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import type {WorkoutPlanRequest} from "../../types/WorkoutPlanRequest.ts";
+import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
 
 type WorkoutFormProps = {
     functionOnSubmit: (new_workout: WorkoutPlanRequest) => void;

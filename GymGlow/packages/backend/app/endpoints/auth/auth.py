@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends, Cookie, Response
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette import status
-from app.db.auth_crud import get_user_by_email, create_user, verify_user, get_admin_id, delete_refresh_token
+from app.db.crud.auth_crud import get_user_by_email, create_user, verify_user, get_admin_id, delete_refresh_token
 from app.db.setup.connection import get_db
 from sqlalchemy.orm import Session
 from app.endpoints.auth.schemas import UserSignup, AuthResponse, RefreshResponse
