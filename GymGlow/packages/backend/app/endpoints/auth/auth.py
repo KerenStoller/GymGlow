@@ -18,7 +18,7 @@ async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
     user = create_user(db, user_data.name, user_data.email, user_data.password)
 
     access_token, refresh_token = create_tokens(db, user.name, user.id)
-    response_content = AuthResponse(access_token=access_token, refresh_token=refresh_token)
+    response_content = AuthResponse(access_token=access_token)
     response = JSONResponse(content=response_content.model_dump())
     response.set_cookie(key="refresh_token", value=refresh_token)
     return response
@@ -31,7 +31,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     access_token, refresh_token = create_tokens(db, user.name, user.id)
-    response_content = AuthResponse(access_token=access_token, refresh_token=refresh_token)
+    response_content = AuthResponse(access_token=access_token)
     response = JSONResponse(content=response_content.model_dump())
     response.set_cookie(key="refresh_token", value=refresh_token)
     return response

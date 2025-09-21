@@ -5,6 +5,7 @@ import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
 import {API} from "../utils/endpoints.ts";
 import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
 import ExerciseList from "./ExerciseList.tsx";
+import type {WorkoutExercisesDTO} from "../types/WorkoutExercisesDTO.ts";
 
 
 const WorkoutDetails = () => {
@@ -18,7 +19,7 @@ const WorkoutDetails = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>('');
     const [exercises, setExercises] = useState<ExerciseDTO[]>([]); // Replace 'any' with the appropriate type for exercises
-
+    //const [exercisesDetails, setExercisesDetails] = useState<[]>([]);
 
 
     useEffect(() => {
@@ -30,7 +31,7 @@ const WorkoutDetails = () => {
             try
             {
                 const response = await axiosPrivate.get(API.WORKOUT_EXERCISES.GET_ALL + `/${id}`);
-                setExercises(response.data);
+                setExercises(() => response.data.map((item: WorkoutExercisesDTO) => item.exercise));
             }
             catch (error)
             {
@@ -63,7 +64,11 @@ const WorkoutDetails = () => {
             </div>
             <div className="card-body">
                 <p className="card-text">{workout.description}</p>
-                {exercises.length > 0 ? (<ExerciseList list={exercises}/>) : (<p className="text-muted">No exercises in this workout.</p>)}
+                {exercises.length > 0 ? (
+                    <ExerciseList list={exercises}/>
+                ) : (
+                    <p className="text-muted">No exercises in this workout.</p>
+                )}
             </div>
             <div className="card-footer d-flex justify-content-between">
                 {!isExampleWorkout &&

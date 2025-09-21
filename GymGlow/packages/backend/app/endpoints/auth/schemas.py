@@ -10,7 +10,6 @@ class UserSignup(BaseModel):
 
 class AuthResponse(BaseModel):
     access_token: str
-    refresh_token: str
 
 class RefreshResponse(BaseModel):
     access_token: str
