@@ -35,7 +35,7 @@ const WorkoutCard : React.FC<Props> = ({workoutDetails, onDelete, onUpdate}) => 
         <div className="card mx-auto"  style = {{ width: '60rem' }}>
             {/* div - button trigger modal */}
             <div className="card-body" role="button" data-bs-toggle="modal" data-bs-target={`#${modalId}`}>
-                <h5 className="card-title">{workoutDetails.name}</h5>
+                <h5 className="card-title">{workoutDetails.title}</h5>
                 <p className="card-text">{workoutDetails.description}</p>
             </div>
             {/* Modal */}
@@ -43,7 +43,7 @@ const WorkoutCard : React.FC<Props> = ({workoutDetails, onDelete, onUpdate}) => 
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id={`${modalId}Label`}>{workoutDetails.name}</h1>
+                            <h1 className="modal-title fs-5" id={`${modalId}Label`}>{workoutDetails.title}</h1>
                             <button className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">

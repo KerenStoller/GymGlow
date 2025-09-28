@@ -4,12 +4,15 @@ from uuid import UUID
 class WorkoutPlanSchema(BaseModel):
     id: UUID
     user_id: UUID
-    name: str
+    title: str
     description: str
 
     class Config:
         orm_mode = True
 
 class WorkoutPlanCreateSchema(BaseModel):
-    name: str
+    title: str
     description: str
+    exercisesIds: list[UUID]
+    class Config:
+        orm_mode = True

@@ -23,7 +23,7 @@ def example_endpoint(db: Session = Depends(get_db)):
 
 @router.post("/create", status_code=201)
 async def create_workout(new_workout: WorkoutPlanCreateSchema, user: User = Depends(get_user_from_access_token), db: Session = Depends(get_db)):
-    create_workout_db(db, user, new_workout.name, new_workout.description)
+    create_workout_db(db, user, new_workout.title, new_workout.description, new_workout.exercisesIds)
     return {"success": True}
 
 @router.delete("/delete/{workout_id}", status_code=204)
@@ -32,4 +32,4 @@ async def delete_workout(workout_id: UUID, user: User = Depends(get_user_from_ac
 
 @router.put("/update/{workout_id}", status_code=204)
 async def update_workout(workout_id: UUID, new_workout: WorkoutPlanCreateSchema, user: User = Depends(get_user_from_access_token), db: Session = Depends(get_db)):
-    update_workout_db(db, user, workout_id, new_workout.name, new_workout.description)
+    update_workout_db(db, user, workout_id, new_workout.title, new_workout.description)

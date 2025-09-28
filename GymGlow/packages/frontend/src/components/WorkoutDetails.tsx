@@ -55,7 +55,7 @@ const WorkoutDetails = () => {
     return (
         <div className="card mx-auto" style={{ width: '60rem' }}>
             <div className="card-header d-flex justify-content-between align-items-center">
-                <h5 className="card-title mb-0">{workout.name}</h5>
+                <h5 className="card-title mb-0">{workout.title}</h5>
                 <button
                 className="btn-close"
                 aria-label="Close"

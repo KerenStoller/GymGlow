@@ -18,4 +18,8 @@ def create_new_exercise(db: Session, exercise_data):
     return new_exercise
 
 def get_exercise_by_id(db: Session, exercise_id):
-    return db.query(Exercise).filter(Exercise.id == exercise_id).first()
+    result = db.query(Exercise).filter(Exercise.id == exercise_id).first()
+    if result is None:
+        print("Exercise not found")
+        raise ValueError(f"Exercise with id {exercise_id} not found")
+    return result

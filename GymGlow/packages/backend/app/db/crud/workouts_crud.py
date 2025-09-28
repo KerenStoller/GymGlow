@@ -15,19 +15,24 @@ def get_workouts_by_admin(db: Session):
     admin_id = admin.id
     return db.query(WorkoutPlan).filter(WorkoutPlan.user_id == admin_id).all()
 
-def create_workout(db: Session, user: AuthUser, name: str, description: str):
-    print("in create_workout")
+def create_workout(db: Session, user: AuthUser, title: str, description: str, exercises: list[UUID]):
     user_id = UUID(user.id)
-    new_workout = WorkoutPlan(user_id=user_id, name=name, description=description)
+    new_workout = WorkoutPlan(user_id=user_id, title=title, description=description)
     db.add(new_workout)
     db.commit()
     db.refresh(new_workout)
+    for exercise_id in exercises:
+        ## TODO: validate exercise_id exists
+        ## TODO: add sets, reps, weight
+        workout_exercise = WorkoutExercise(workout_plan_id=new_workout.id, exercise_id=exercise_id)
+        db.add(workout_exercise)
+    db.commit()
 
 def create_admin_workout(db: Session):
     admin = db.query(User).filter(User.email == "admin@admin").first()
     if not admin:
         return
-    admin_workout = WorkoutPlan(user_id=admin.id, name="Admin Workout", description="This is the default admin workout plan.")
+    admin_workout = WorkoutPlan(user_id=admin.id, title="Admin Workout", description="This is the default admin workout plan.")
     db.add(admin_workout)
     db.commit()
     db.refresh(admin_workout)
@@ -39,11 +44,11 @@ def delete_workout(db: Session, user: AuthUser, workout_id: UUID):
         db.delete(workout)
         db.commit()
 
-def update_workout(db: Session, user: AuthUser, workout_id: UUID, name: str, description: str):
+def update_workout(db: Session, user: AuthUser, workout_id: UUID, title: str, description: str):
     user_id = UUID(user.id)
     workout = db.query(WorkoutPlan).filter(WorkoutPlan.id == workout_id, WorkoutPlan.user_id == user_id).first()
     if workout:
-        workout.name = name
+        workout.title = title
         workout.description = description
         db.commit()
         db.refresh(workout)

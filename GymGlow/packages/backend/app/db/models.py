@@ -32,7 +32,7 @@ class WorkoutPlan(Base):
     __tablename__ = "workout_plans"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     user_id = Column(ForeignKey("users.id"), nullable=False)
-    name = Column("name", String, nullable=False)
+    title = Column("title", String, nullable=False)
     description = Column("description", String, nullable=True)
 
 

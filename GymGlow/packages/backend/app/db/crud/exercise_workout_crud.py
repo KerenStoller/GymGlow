@@ -30,8 +30,8 @@ def get_workout_exercises(db: Session, workout_id: UUID):
     for relation_model in list_of_relations:
         exercise_model = get_exercise_by_id(db, relation_model.exercise_id)
         exercise_schema = ExerciseSchema.model_validate(exercise_model)
-        print(type(relation_model))
         relation_schema = WorkoutExerciseSchema.model_validate(relation_model)
+        print("validated relation schema:", relation_schema)
         workout_exercise = ExercisesOfWorkoutSchema(
             id=relation_schema.id,
             exercise=exercise_schema,

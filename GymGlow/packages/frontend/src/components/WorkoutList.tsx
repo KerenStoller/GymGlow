@@ -25,7 +25,7 @@ const WorkoutList: React.FC<Props> = ({list}) => {
                                 {/* in the future move this to Workout Card that shows name and description*/}
                                 <div className="card mx-auto" style = {{ width: '60rem' }}>
                                     <div className="card-body">
-                                        <h5 className="card-title">{workout.name}</h5>
+                                        <h5 className="card-title">{workout.title}</h5>
                                         <p className="card-text">{workout.description}</p>
                                     </div>
                                 </div>

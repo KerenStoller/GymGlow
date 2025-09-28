@@ -6,25 +6,25 @@ class WorkoutExerciseSchema(BaseModel):
     id: UUID
     workout_plan_id: UUID
     exercise_id: UUID
-    sets: str
-    reps: str
-    weight: str
+    sets: str | None
+    reps: str | None
+    weight: str | None
 
     model_config = {
         'from_attributes': True
     }
 
 class WorkoutExerciseCreateSchema(BaseModel):
-    sets: str
-    reps: str
-    weight: str
+    sets: str | None
+    reps: str | None
+    weight: str | None
 
 class ExercisesOfWorkoutSchema(BaseModel):
     id: UUID
     exercise: ExerciseSchema
-    sets: str
-    reps: str
-    weight: str
+    sets: str | None
+    reps: str | None
+    weight: str | None
 
     model_config = {
         'from_attributes': True

@@ -5,7 +5,7 @@ export interface WorkoutDTO
 {
     id: string;
     user_id: string;
-    name: string;
+    title: string;
     description: string | null;
 }
 

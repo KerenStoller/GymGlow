@@ -14,6 +14,7 @@ const CreateWorkout = () => {
 
     async function createNewWorkout(new_workout: WorkoutPlanRequest)
     {
+        console.log(new_workout);
         setErrorMsg('');
         setLoading(true);
 
@@ -21,7 +22,7 @@ const CreateWorkout = () => {
         {
             await axiosPrivate.post(
                 API.WORKOUT_PLANS.CREATE,
-                {name: new_workout.title, description: new_workout.description},
+                new_workout,
                 {
                     headers: { 'Content-Type': 'application/json' },
                 }

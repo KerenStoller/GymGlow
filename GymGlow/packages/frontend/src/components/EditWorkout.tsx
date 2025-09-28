@@ -49,7 +49,7 @@ const EditWorkout = () => {
         const title = titleRef.current!.value;
         const description = descriptionRef.current!.value;
 
-        if(title === workout.name && description === workout.description)
+        if(title === workout.title && description === workout.description)
         {
             setLoading(false);
             navigate('/root/workouts');
@@ -85,7 +85,7 @@ const EditWorkout = () => {
                         id="title"
                         name="title"
                         className="form-control"
-                        defaultValue={workout.name}
+                        defaultValue={workout.title}
                         ref={titleRef}
                     />
                 </div>
