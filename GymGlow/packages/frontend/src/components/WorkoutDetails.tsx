@@ -1,11 +1,10 @@
 import {useParams, useNavigate, useLocation, Link} from "react-router-dom";
 import {useState, useEffect} from "react";
-import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
+import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
 import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
 import {API} from "../utils/endpoints.ts";
-import type {ExerciseDTO} from "../types/ExerciseDTO.ts";
-import ExerciseList from "./ExerciseList.tsx";
-import type {WorkoutExercisesDTO} from "../types/WorkoutExercisesDTO.ts";
+import WorkoutExerciseList from "./WorkoutExerciseList.tsx";
+import type WorkoutExerciseDTO from "../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
 
 
 const WorkoutDetails = () => {
@@ -18,8 +17,7 @@ const WorkoutDetails = () => {
     const isExampleWorkout = workout.user_id === localStorage.getItem('adminId');
     const [loading, setLoading] = useState<boolean>(false);
     const [errorMsg, setErrorMsg] = useState<string>('');
-    const [exercises, setExercises] = useState<ExerciseDTO[]>([]); // Replace 'any' with the appropriate type for exercises
-    //const [exercisesDetails, setExercisesDetails] = useState<[]>([]);
+    const [exercisesDetails, setExercisesDetails] = useState<WorkoutExerciseDTO[]>([]);
 
 
     useEffect(() => {
@@ -31,7 +29,7 @@ const WorkoutDetails = () => {
             try
             {
                 const response = await axiosPrivate.get(API.WORKOUT_EXERCISES.GET_ALL + `/${id}`);
-                setExercises(() => response.data.map((item: WorkoutExercisesDTO) => item.exercise));
+                setExercisesDetails(response.data);
             }
             catch (error)
             {
@@ -48,7 +46,6 @@ const WorkoutDetails = () => {
 
     const handleClose = () => {
         // Implement close functionality, e.g., navigate back or hide details
-        console.log('Close button clicked');
         navigate(-1); // Navigate back to the previous page
     }
 
@@ -64,8 +61,8 @@ const WorkoutDetails = () => {
             </div>
             <div className="card-body">
                 <p className="card-text">{workout.description}</p>
-                {exercises.length > 0 ? (
-                    <ExerciseList list={exercises}/>
+                {exercisesDetails.length > 0 ? (
+                    <WorkoutExerciseList list={exercisesDetails}/>
                 ) : (
                     <p className="text-muted">No exercises in this workout.</p>
                 )}

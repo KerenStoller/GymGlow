@@ -1,7 +1,7 @@
 from uuid import uuid4
 from app.db.setup.base import Base
 from sqlalchemy.dialects.postgresql import UUID  # if using Postgres
-from sqlalchemy import Column, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Integer
 
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
@@ -41,6 +41,6 @@ class WorkoutExercise(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     workout_plan_id = Column(UUID, ForeignKey("workout_plans.id"), nullable=False)
     exercise_id = Column(UUID, ForeignKey("exercises.id"), nullable=False)
-    sets = Column("sets", String, nullable=True)  # e.g., "3"
-    reps = Column("reps", String, nullable=True)  # e.g., "10-12"
-    weight = Column("weight", String, nullable=True)
+    sets = Column("sets", Integer, nullable=False)
+    reps = Column("reps", Integer, nullable=False)
+    weight = Column("weight", String, nullable=False)

@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import TabButton from "./TabButton.tsx";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 type Tab = {
   key: string;
@@ -17,14 +17,19 @@ const tabs: Tab[] = [
 ];
 
 const MainNavigation = () => {
-    const [selectedTab, setSelectedTab] = useState<string>("");
+    const defaultKey = "home";
+    const [selectedTab, setSelectedTab] = useState<string>(defaultKey);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        navigate(tabs.find(tab => tab.key === defaultKey)!.path);
+    }, []);
 
     const handleSelect = (tabKey: string, tabPath: string) => {
         if (selectedTab === tabKey)
         {
-            navigate("/root"); // navigating to root if same tab clicked (optional)
-            setSelectedTab("");
+            setSelectedTab(defaultKey);
+            navigate(tabs.find(tab => tab.key === defaultKey)!.path);
         }
         else
         {

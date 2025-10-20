@@ -1,5 +1,5 @@
 import {useState} from "react";
-import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
+import type {WorkoutPlanRequest} from "../types/Requests/WorkoutPlanRequest.ts";
 import {API} from "../utils/endpoints.ts";
 import WorkoutForm from "../components/WorkoutForm.tsx";
 import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";

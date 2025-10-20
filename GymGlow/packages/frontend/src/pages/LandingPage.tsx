@@ -28,21 +28,18 @@ const LandingPage = () =>
         event.preventDefault();
         setLoading(true);
 
-        // get admin id if not already in local storage.
-        if(!localStorage.getItem('adminId'))
+        try
         {
-            try
-            {
-                const responseAdminId = await axios.get(API.AUTH.ADMIN);
-                localStorage.setItem('adminId', responseAdminId.data.admin_id);
-            }
-            catch (e: any)
-            {
-                setErrMsg(e.message);
-                setLoading(false);
-                return;
-            }
+            const responseAdminId = await axios.get(API.AUTH.ADMIN);
+            localStorage.setItem('adminId', responseAdminId.data.admin_id);
         }
+        catch (e: any)
+        {
+            setErrMsg(e.message);
+            setLoading(false);
+            return;
+        }
+
 
         try
         {

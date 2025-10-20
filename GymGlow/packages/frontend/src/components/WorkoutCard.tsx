@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
-import type {WorkoutPlanRequest} from "../types/WorkoutPlanRequest.ts";
+import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
+import type {WorkoutPlanRequest} from "../types/Requests/WorkoutPlanRequest.ts";
 import WorkoutForm from "./WorkoutForm.tsx";
 
 type Props = {

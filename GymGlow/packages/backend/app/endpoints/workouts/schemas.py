@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from uuid import UUID
+from app.endpoints.workout_exercise.schemas import WorkoutExerciseCreateSchema
 
 class WorkoutPlanSchema(BaseModel):
     id: UUID
@@ -13,6 +14,6 @@ class WorkoutPlanSchema(BaseModel):
 class WorkoutPlanCreateSchema(BaseModel):
     title: str
     description: str
-    exercisesIds: list[UUID]
+    exercises: list[WorkoutExerciseCreateSchema]
     class Config:
         orm_mode = True

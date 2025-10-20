@@ -23,7 +23,7 @@ def example_endpoint(db: Session = Depends(get_db)):
 
 @router.post("/create", status_code=201)
 async def create_workout(new_workout: WorkoutPlanCreateSchema, user: User = Depends(get_user_from_access_token), db: Session = Depends(get_db)):
-    create_workout_db(db, user, new_workout.title, new_workout.description, new_workout.exercisesIds)
+    create_workout_db(db, user, new_workout.title, new_workout.description, new_workout.exercises)
     return {"success": True}
 
 @router.delete("/delete/{workout_id}", status_code=204)

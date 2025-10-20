@@ -1,4 +1,4 @@
-export interface ExerciseDTO {
+export interface ExerciseExplanationDTO {
     id: string;
     name: string;
     description: string | null;

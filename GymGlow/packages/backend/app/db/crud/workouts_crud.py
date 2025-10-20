@@ -1,7 +1,8 @@
 from sqlalchemy.orm import Session
-from app.db.models import WorkoutPlan, Exercise, WorkoutExercise
+from app.db.models import WorkoutPlan, WorkoutExercise
 from app.db.models import User
 from app.endpoints.auth.schemas import User as AuthUser
+from app.endpoints.workout_exercise.schemas import WorkoutExerciseCreateSchema
 from uuid import UUID
 
 def get_workouts_by_user(db: Session, user: AuthUser):
@@ -15,16 +16,20 @@ def get_workouts_by_admin(db: Session):
     admin_id = admin.id
     return db.query(WorkoutPlan).filter(WorkoutPlan.user_id == admin_id).all()
 
-def create_workout(db: Session, user: AuthUser, title: str, description: str, exercises: list[UUID]):
+def create_workout(db: Session, user: AuthUser, title: str, description: str, exercises: list[WorkoutExerciseCreateSchema]):
     user_id = UUID(user.id)
     new_workout = WorkoutPlan(user_id=user_id, title=title, description=description)
     db.add(new_workout)
     db.commit()
     db.refresh(new_workout)
-    for exercise_id in exercises:
+    for exercise in exercises:
         ## TODO: validate exercise_id exists
-        ## TODO: add sets, reps, weight
-        workout_exercise = WorkoutExercise(workout_plan_id=new_workout.id, exercise_id=exercise_id)
+        workout_exercise = WorkoutExercise(
+            workout_plan_id=new_workout.id,
+            exercise_id=exercise.id,
+            sets=exercise.sets,
+            reps=exercise.reps,
+            weight=exercise.weight)
         db.add(workout_exercise)
     db.commit()
 

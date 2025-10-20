@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom";
 //import WorkoutCard from "./WorkoutCard.tsx";
-import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
+import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
 
 type Props = {
     list: WorkoutDTO[];

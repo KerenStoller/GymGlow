@@ -2,7 +2,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import {useState, useRef} from "react";
 import {API} from "../utils/endpoints.ts";
 import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
-import type {WorkoutDTO} from "../types/WorkoutDTO.ts";
+import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
 
 const EditWorkout = () => {
     const { id } = useParams<{ id: string }>();
@@ -20,7 +20,6 @@ const EditWorkout = () => {
     function onClose() {
         navigate('/root/workouts');
     }
-
 
     async function deleteWorkout()
     {
@@ -60,7 +59,7 @@ const EditWorkout = () => {
         {
             await axiosPrivate.put(
                 API.WORKOUT_PLANS.UPDATE + `/${id}`,
-                {name: title, description},
+                {title, description, exercises: []},
                 {
                     headers: { 'Content-Type': 'application/json' },
                 });
