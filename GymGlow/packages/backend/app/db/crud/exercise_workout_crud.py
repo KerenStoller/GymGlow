@@ -6,21 +6,18 @@ from app.endpoints.exercises.schemas import ExerciseSchema
 from app.db.crud.exercises_crud import get_exercise_by_id
 
 
-def add_exercise_to_workout(db: Session, workout_id: UUID, exercise_id: UUID, new_relation: WorkoutExerciseCreateSchema):
-    workout = db.query(WorkoutPlan).filter(WorkoutPlan.id == workout_id).first()
-    exercise = db.query(Exercise).filter(Exercise.id == exercise_id).first()
-    if workout and exercise:
-        print(new_relation)
+def add_exercise_to_workout(db: Session, workout: WorkoutPlan, new_exercise: WorkoutExerciseCreateSchema):
+    db_exercise = db.query(Exercise).filter(Exercise.id == new_exercise.id).first()
+    if db_exercise:
         workout_exercise = WorkoutExercise(
             workout_plan_id=workout.id,
-            exercise_id=exercise.id,
-            sets=new_relation.sets,
-            reps=new_relation.reps,
-            weight=new_relation.weight,
+            exercise_id=db_exercise.id,
+            sets=new_exercise.sets,
+            reps=new_exercise.reps,
+            weight=new_exercise.weight,
         )
         db.add(workout_exercise)
         db.commit()
-        db.refresh(workout)
 
 
 def get_workout_exercises(db: Session, workout_id: UUID):
@@ -40,3 +37,13 @@ def get_workout_exercises(db: Session, workout_id: UUID):
         result.append(workout_exercise)
 
     return result
+
+def update_workout_exercises(db: Session, workout: WorkoutPlan, exercises: list[WorkoutExerciseCreateSchema]):
+    # delete existing relations
+    db.query(WorkoutExercise).filter(WorkoutExercise.workout_plan_id == workout.id).delete()
+    db.commit()
+
+    # add new relations
+    for exercise in exercises:
+        add_exercise_to_workout(db, workout, exercise)
+    db.commit()

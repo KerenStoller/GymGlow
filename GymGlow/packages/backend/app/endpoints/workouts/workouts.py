@@ -32,4 +32,4 @@ async def delete_workout(workout_id: UUID, user: User = Depends(get_user_from_ac
 
 @router.put("/update/{workout_id}", status_code=204)
 async def update_workout(workout_id: UUID, new_workout: WorkoutPlanCreateSchema, user: User = Depends(get_user_from_access_token), db: Session = Depends(get_db)):
-    update_workout_db(db, user, workout_id, new_workout.title, new_workout.description)
+    update_workout_db(db, user, workout_id, new_workout.title, new_workout.description, new_workout.exercises)

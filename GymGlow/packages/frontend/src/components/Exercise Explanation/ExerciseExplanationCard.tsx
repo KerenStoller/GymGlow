@@ -1,4 +1,4 @@
-import type {ExerciseExplanationDTO} from "../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
+import type {ExerciseExplanationDTO} from "../../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
 
 const ExerciseExplanationCard = (exercise: ExerciseExplanationDTO) => {
     return (

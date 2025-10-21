@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useTokens from "../hooks/useTokens.ts";
-import cuteCoffeePic from '../assets/cute-coffee.jpg';
+import useTokens from "../../hooks/useTokens.ts";
+import cuteCoffeePic from '../../assets/cute-coffee.jpg';
 
 const ExpiredRefresh = () => {
     const [show, setShow] = useState(true);

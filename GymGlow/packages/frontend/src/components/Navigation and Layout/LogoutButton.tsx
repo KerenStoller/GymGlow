@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
-import useTokens from "../hooks/useTokens.ts";
-import useLogout from "../hooks/useLogout.tsx";
-import cuteKoalaRunningPic from "../assets/cute-koala-running.jpg";
+import useTokens from "../../hooks/useTokens.ts";
+import useLogout from "../../hooks/useLogout.tsx";
+import cuteKoalaRunningPic from "../../assets/cute-koala-running.jpg";
 
 const LogoutButton = () =>
 {

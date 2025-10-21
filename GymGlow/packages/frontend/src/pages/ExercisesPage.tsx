@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "../api/axios.ts";
 import {API} from "../utils/endpoints.ts";
-import ExerciseExplanationList from "../components/ExerciseExplanationList.tsx";
+import ExerciseExplanationList from "../components/Exercise Explanation/ExerciseExplanationList.tsx";
 
 const ExercisesPage = () => {
     const [loading, setLoading] = useState(false);

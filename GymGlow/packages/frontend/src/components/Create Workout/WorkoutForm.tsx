@@ -1,27 +1,36 @@
 import { useRef, useState, useEffect } from 'react';
-import type {WorkoutPlanRequest} from "../types/Requests/WorkoutPlanRequest.ts";
-import type {ExerciseExplanationDTO} from "../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
-import type {ExerciseDetails} from "../types/Requests/WorkoutPlanRequest.ts";
-import axios from "../api/axios.ts";
-import {API} from "../utils/endpoints.ts";
+import type {WorkoutPlanRequest} from "../../types/Requests/WorkoutPlanRequest.ts";
+import type {ExerciseExplanationDTO} from "../../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
+import type {ExerciseDetails} from "../../types/Requests/WorkoutPlanRequest.ts";
+import axios from "../../api/axios.ts";
+import {API} from "../../utils/endpoints.ts";
 
 type WorkoutFormProps = {
     functionOnSubmit: (new_workout: WorkoutPlanRequest) => void;
+    initialData?: WorkoutPlanRequest;
     mode?: string;
     inModal?: boolean;
 }
 
-const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, mode, inModal}) => {
+const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData, mode, inModal}) => {
     const title = useRef<HTMLInputElement>(null);
     const description = useRef<HTMLTextAreaElement>(null);
     const [exercisesToChooseFrom, setExercisesToChooseFrom] = useState<ExerciseExplanationDTO[]>([]);
     const [selectedExercises, setSelectedExercises] = useState<ExerciseDetails[]>([]);
 
-
     const buttonText = mode ? 'Update Workout' : 'Create Workout';
 
+    // for edit mode
     useEffect(() => {
-        async function getExercises(){
+        if (initialData) {
+            if (title.current) title.current.value = initialData.title;
+            if (description.current) description.current.value = initialData.description || "";
+            setSelectedExercises(initialData.exercises || []);
+        }
+    }, [initialData]);
+
+    useEffect(() => {
+        async function getExercisesToChooseFrom(){
             //TODO: implement React Query
 
             try
@@ -35,7 +44,7 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, mode, inMod
             }
         }
 
-        getExercises();
+        getExercisesToChooseFrom();
     }, []);
 
     function handleExerciseToggle(exercise: ExerciseDetails)
@@ -52,22 +61,25 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, mode, inMod
         });
     }
 
+    function updateExerciseField(id: string, field: "sets" | "reps" | "weight", value: any) {
+        setSelectedExercises(prev => {
+            return prev.map(exercise =>
+                exercise.id === id ? { ...exercise, [field]: value } : exercise);
+        });
+    }
+
     function handleSubmit(event: React.FormEvent)
     {
         event.preventDefault();
         functionOnSubmit(
             { title: title.current!.value, description: description.current!.value,
             exercises: [...selectedExercises] });
-        title.current!.value = '';
-        description.current!.value = '';
-        setSelectedExercises([]);
-    }
-
-    function updateExerciseField(id: string, field: "sets" | "reps" | "weight", value: any) {
-        setSelectedExercises(prev => {
-            return prev.map(exercise =>
-                exercise.id === id ? { ...exercise, [field]: value } : exercise);
-        });
+        // Only clear form if we're creating
+        if (mode !== "edit") {
+            title.current!.value = "";
+            description.current!.value = "";
+            setSelectedExercises([]);
+        }
     }
 
     return (

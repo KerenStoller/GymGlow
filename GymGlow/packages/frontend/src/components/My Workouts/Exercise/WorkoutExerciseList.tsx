@@ -1,17 +1,16 @@
-import ExerciseExplanationCard from "./ExerciseExplanationCard.tsx"
-import type {ExerciseExplanationDTO} from "../types/Data Transfer Objects/ExerciseExplanationDTO.ts"
+import WorkoutExerciseCard from "./WorkoutExerciseCard.tsx"
+import type WorkoutExerciseDTO from "../../../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
 
 type Props = {
-    list: ExerciseExplanationDTO[];
+    list: WorkoutExerciseDTO[];
 }
 
-const ExerciseExplanationList: React.FC<Props> = ({list}) => {
-
+const WorkoutExerciseList: React.FC<Props> = ({list}) => {
     return (
         <div className="container pt-2">
             {list.length === 0 ? (
             <div className="text-center">
-                <p className="fs-5 text-muted">You have no exercises yet.</p>
+                <p className="fs-5 text-muted">No exercises in this workout.</p>
             </div>
             ) : (
                 <div
@@ -19,7 +18,7 @@ const ExerciseExplanationList: React.FC<Props> = ({list}) => {
                 >
                     {list.map((exercise) =>
                         <div className="w-100 d-flex justify-content-center" key={exercise.id}>
-                            <ExerciseExplanationCard {...exercise} />
+                            <WorkoutExerciseCard {...exercise} />
                         </div>
                     )}
                 </div>
@@ -28,4 +27,4 @@ const ExerciseExplanationList: React.FC<Props> = ({list}) => {
     );
 };
 
-export default ExerciseExplanationList;
+export default WorkoutExerciseList;

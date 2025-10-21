@@ -1,4 +1,4 @@
-import WorkoutList from "../components/WorkoutList.tsx";
+import WorkoutList from "../components/My Workouts/WorkoutList.tsx";
 import {useState, useEffect} from "react";
 import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
 import axios from "../api/axios.ts";

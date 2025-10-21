@@ -1,16 +1,16 @@
 import { redirect } from "react-router";
 import {createBrowserRouter} from "react-router-dom";
 import LandingPage from "./pages/LandingPage.tsx";
-import Layout from "./components/Layout";
-import RequireToken from "./components/RequireToken.tsx";
+import Layout from "./components/Navigation and Layout/Layout.tsx";
+import RequireToken from "./components/Token/RequireToken.tsx";
 import WorkoutsPage from "./pages/WorkoutsPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import RootPage from "./pages/RootPage.tsx";
-import WorkoutDetails from "./components/WorkoutDetails.tsx";
+import WorkoutDetails from "./components/My Workouts/WorkoutDetails.tsx";
 import ExercisesPage from "./pages/ExercisesPage.tsx";
 import CreateWorkout from "./pages/CreateWorkout.tsx";
 import ExampleWorkout from "./pages/ExampleWorkout.tsx";
-import EditWorkout from "./components/EditWorkout.tsx";
+import EditWorkout from "./components/My Workouts/EditWorkout.tsx";
 
 
 export const router = createBrowserRouter([

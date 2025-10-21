@@ -10,9 +10,9 @@ type Tab = {
 
 const tabs: Tab[] = [
     { key: "home", label: "Home", path: "/root/home" },
-    { key: "workouts", label: "My Workouts", path: "/root/workouts" },
-    { key: "createWorkout", label: "Create Workout", path: "/root/createWorkout" },
-    { key: "example", label: "Workout Example", path: "/root/example" },
+    { key: "workouts", label: "My My Workouts", path: "/root/workouts" },
+    { key: "createWorkout", label: "Create My Workouts", path: "/root/createWorkout" },
+    { key: "example", label: "My Workouts Example", path: "/root/example" },
     { key: "exercises", label: "Exercises", path: "/root/exercises" },
 ];
 

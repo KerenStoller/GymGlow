@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {API} from "../utils/endpoints.ts";
 import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
-import WorkoutList from "../components/WorkoutList.tsx";
+import WorkoutList from "../components/My Workouts/WorkoutList.tsx";
 
 const WorkoutsPage = () => {
     const [loading, setLoading] = useState(false);

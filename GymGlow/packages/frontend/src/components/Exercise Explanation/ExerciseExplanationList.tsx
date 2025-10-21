@@ -1,13 +1,12 @@
-import WorkoutExerciseCard from "./WorkoutExerciseCard.tsx"
-import type WorkoutExerciseDTO from "../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
+import ExerciseExplanationCard from "./ExerciseExplanationCard.tsx"
+import type {ExerciseExplanationDTO} from "../../types/Data Transfer Objects/ExerciseExplanationDTO.ts"
 
 type Props = {
-    list: WorkoutExerciseDTO[];
+    list: ExerciseExplanationDTO[];
 }
 
-const WorkoutExerciseList: React.FC<Props> = ({list}) => {
+const ExerciseExplanationList: React.FC<Props> = ({list}) => {
 
-    console.log(list);
     return (
         <div className="container pt-2">
             {list.length === 0 ? (
@@ -20,7 +19,7 @@ const WorkoutExerciseList: React.FC<Props> = ({list}) => {
                 >
                     {list.map((exercise) =>
                         <div className="w-100 d-flex justify-content-center" key={exercise.id}>
-                            <WorkoutExerciseCard {...exercise} />
+                            <ExerciseExplanationCard {...exercise} />
                         </div>
                     )}
                 </div>
@@ -29,4 +28,4 @@ const WorkoutExerciseList: React.FC<Props> = ({list}) => {
     );
 };
 
-export default WorkoutExerciseList;
+export default ExerciseExplanationList;

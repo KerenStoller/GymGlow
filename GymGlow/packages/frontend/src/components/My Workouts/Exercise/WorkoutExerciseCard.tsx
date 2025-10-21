@@ -1,7 +1,6 @@
-import type WorkoutExerciseDTO from "../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
+import type WorkoutExerciseDTO from "../../../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
 
 const WorkoutExerciseCard = (exercise: WorkoutExerciseDTO) => {
-    console.log("ExerciseCard", exercise);
     return (
         <div
             className="d-flex mx-auto align-items-start w-100"

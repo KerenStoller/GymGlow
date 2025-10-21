@@ -1,5 +1,5 @@
 import { createContext, useState } from 'react';
-import ExpiredRefresh from "../components/ExpiredRefreshModal.tsx";
+import ExpiredRefresh from "../components/Token/ExpiredRefreshModal.tsx";
 
 type TokenContextType = {
     accessToken: string;

@@ -1,10 +1,10 @@
 import {useParams, useNavigate, useLocation, Link} from "react-router-dom";
 import {useState, useEffect} from "react";
-import type {WorkoutDTO} from "../types/Data Transfer Objects/WorkoutDTO.ts";
-import {useAxiosPrivate} from "../hooks/useAxiosPrivate.ts";
-import {API} from "../utils/endpoints.ts";
-import WorkoutExerciseList from "./WorkoutExerciseList.tsx";
-import type WorkoutExerciseDTO from "../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
+import type {WorkoutDTO} from "../../types/Data Transfer Objects/WorkoutDTO.ts";
+import {useAxiosPrivate} from "../../hooks/useAxiosPrivate.ts";
+import {API} from "../../utils/endpoints.ts";
+import WorkoutExerciseList from "./Exercise/WorkoutExerciseList.tsx";
+import type WorkoutExerciseDTO from "../../types/Data Transfer Objects/WorkoutExerciseDTO.tsx";
 
 
 const WorkoutDetails = () => {
@@ -45,7 +45,6 @@ const WorkoutDetails = () => {
 
 
     const handleClose = () => {
-        // Implement close functionality, e.g., navigate back or hide details
         navigate(-1); // Navigate back to the previous page
     }
 
@@ -53,25 +52,17 @@ const WorkoutDetails = () => {
         <div className="card mx-auto" style={{ width: '60rem' }}>
             <div className="card-header d-flex justify-content-between align-items-center">
                 <h5 className="card-title mb-0">{workout.title}</h5>
-                <button
-                className="btn-close"
-                aria-label="Close"
-                onClick={handleClose}
-                />
+                <button className="btn-close" aria-label="Close" onClick={handleClose}/>
             </div>
             <div className="card-body">
                 <p className="card-text">{workout.description}</p>
-                {exercisesDetails.length > 0 ? (
-                    <WorkoutExerciseList list={exercisesDetails}/>
-                ) : (
-                    <p className="text-muted">No exercises in this workout.</p>
-                )}
+                <WorkoutExerciseList list={exercisesDetails}/>
             </div>
             <div className="card-footer d-flex justify-content-between">
                 {!isExampleWorkout &&
                     <Link
                         to={`/root/workoutDetails/edit/${id}`}
-                        state={{ workout }}
+                        state={{ workout, exercises: exercisesDetails }}
                         className="btn btn-outline-primary"
                     >
                         Edit
