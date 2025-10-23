@@ -26,7 +26,6 @@ const TokenContextProvider : React.FC<React.PropsWithChildren<{}>> = ({ children
         setGotRefresh,
     }), [accessToken, gotRefresh]);
 
-
     return (
         <TokenContext.Provider value={contextValue}>
             {!gotRefresh && accessToken !== '' && <ExpiredRefresh />}
