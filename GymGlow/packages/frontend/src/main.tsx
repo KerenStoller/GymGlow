@@ -5,12 +5,16 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {RouterProvider} from "react-router-dom";
 import {router} from "./router";
 import TokenContextProvider from "../src/store/token-context.tsx";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-      <TokenContextProvider>
-          <RouterProvider router={router} />
-      </TokenContextProvider>
+      <QueryClientProvider client={queryClient}>
+        <TokenContextProvider>
+            <RouterProvider router={router} />
+        </TokenContextProvider>
+      </QueryClientProvider>
   </StrictMode>,
 )

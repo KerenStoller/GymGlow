@@ -1,40 +1,20 @@
-import {useEffect, useState} from "react";
-import axios from "../api/axios.ts";
-import {API} from "../utils/endpoints.ts";
+import {useQuery} from "@tanstack/react-query";
 import ExerciseExplanationList from "../components/Exercise Explanation/ExerciseExplanationList.tsx";
+import {getExercisesToChooseFrom} from "../utils/GetExamplesFromBackend.tsx";
 
 const ExercisesPage = () => {
-    const [loading, setLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState<string>('');
-    const [exercisesFetched, setExercisesFetched] = useState<any[]>([]);
-    const [showExercises, setShowExercises] = useState<boolean>(false);
 
-    useEffect(() => {
-        async function getExercises(){
-            setLoading(true);
-
-            try
-            {
-                const response = await axios.get(API.EXERCISES.GET_ALL);
-                setExercisesFetched(response.data);
-                setShowExercises(true);
-            }
-            catch (e: any)
-            {
-                setErrorMsg(e.message);
-            }
-
-            setLoading(false);
-        }
-
-        getExercises();
-    }, [])
+    const {data: exercisesToChooseFrom, isLoading, isError, error} = useQuery({
+        queryKey: ['exercisesToChooseFrom'],
+        queryFn: getExercisesToChooseFrom,
+        staleTime: 30000, // every 30 seconds call queryFn again
+    })
 
     return (
         <>
-            {loading && <div>Loading...</div>}
-            {errorMsg && <div className="alert alert-danger" role="alert">{errorMsg}</div>}
-            {showExercises && <ExerciseExplanationList list={exercisesFetched!}/>}
+            {isLoading && <div>Loading...</div>}
+            {isError && <div className="alert alert-danger" role="alert">{error.message}</div>}
+            {exercisesToChooseFrom && <ExerciseExplanationList list={exercisesToChooseFrom!}/>}
         </>
     );
 };

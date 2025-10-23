@@ -1,9 +1,11 @@
+import { useQuery } from '@tanstack/react-query';
 import { useRef, useState, useEffect } from 'react';
 import type {WorkoutPlanRequest} from "../../types/Requests/WorkoutPlanRequest.ts";
-import type {ExerciseExplanationDTO} from "../../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
+//import type {ExerciseExplanationDTO} from "../../types/Data Transfer Objects/ExerciseExplanationDTO.ts";
 import type {ExerciseDetails} from "../../types/Requests/WorkoutPlanRequest.ts";
-import axios from "../../api/axios.ts";
-import {API} from "../../utils/endpoints.ts";
+//import axios from "../../api/axios.ts";
+//import {API} from "../../utils/endpoints.ts";
+import {getExercisesToChooseFrom} from "../../utils/GetExamplesFromBackend.tsx";
 
 type WorkoutFormProps = {
     functionOnSubmit: (new_workout: WorkoutPlanRequest) => void;
@@ -13,9 +15,10 @@ type WorkoutFormProps = {
 }
 
 const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData, mode, inModal}) => {
+
     const title = useRef<HTMLInputElement>(null);
     const description = useRef<HTMLTextAreaElement>(null);
-    const [exercisesToChooseFrom, setExercisesToChooseFrom] = useState<ExerciseExplanationDTO[]>([]);
+    //const [exercisesToChooseFrom, setExercisesToChooseFrom] = useState<ExerciseExplanationDTO[]>([]);
     const [selectedExercises, setSelectedExercises] = useState<ExerciseDetails[]>([]);
 
     const buttonText = mode ? 'Update Workout' : 'Create Workout';
@@ -29,23 +32,11 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData
         }
     }, [initialData]);
 
-    useEffect(() => {
-        async function getExercisesToChooseFrom(){
-            //TODO: implement React Query
-
-            try
-            {
-                const response = await axios.get(API.EXERCISES.GET_ALL);
-                setExercisesToChooseFrom(response.data);
-            }
-            catch (e: any)
-            {
-                console.error(e.message);
-            }
-        }
-
-        getExercisesToChooseFrom();
-    }, []);
+    const {data: exercisesToChooseFrom, isLoading, isError, error} = useQuery({
+        queryKey: ['exercisesToChooseFrom'],
+        queryFn: getExercisesToChooseFrom,
+        staleTime: 30000, // every 30 seconds call queryFn again
+    })
 
     function handleExerciseToggle(exercise: ExerciseDetails)
     {
@@ -81,6 +72,9 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData
             setSelectedExercises([]);
         }
     }
+
+    if (isLoading) return <p>Loading...</p>;
+    if (isError) return <p>Error: {(error as Error).message}</p>;
 
     return (
         <div
@@ -125,7 +119,7 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData
                                 </tr>
                             </thead>
                             <tbody>
-                                {exercisesToChooseFrom.map(exercise => {
+                                {exercisesToChooseFrom?.map(exercise => {
                                     const selected = selectedExercises.find(e => e.id === exercise.id);
                                     const details = selected || { id: exercise.id, sets: 0, reps: 0, weight: "0" };
 

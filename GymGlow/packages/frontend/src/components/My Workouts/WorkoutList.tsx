@@ -16,9 +16,9 @@ const WorkoutList: React.FC<Props> = ({list}) => {
                 <div className="d-flex flex-column align-items-center gap-3">
                     <p className="fs-6 text-muted mb-2">Click a workout to view more</p>
                     {list.map((workout) =>
-                        <>
+                        <li key={workout.id}>
                             <WorkoutCard workout={workout}/>
-                        </>
+                        </li>
                     )}
                 </div>
             )}
