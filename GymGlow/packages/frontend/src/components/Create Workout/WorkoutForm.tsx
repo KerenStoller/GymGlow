@@ -89,13 +89,14 @@ const WorkoutForm : React.FC<WorkoutFormProps> = ({functionOnSubmit, initialData
         >
             <form onSubmit={handleSubmit}
                   className="auth-form"
-                  style={{display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '300px'}}
+                  style={{display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '155px'}}
             >
                 <input
                     type="text" ref={title} placeholder="Workout Title" className="form-control" required={true}
                 />
                 <textarea
                     ref={description} placeholder="Workout Description" className="form-control" required={true}
+                    style={{ minHeight: '100px', resize: 'vertical', width: '500px' }}
                 />
 
                 <div className="dropdown">
