@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 // For local development
-//const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://localhost:8000";
 
 // For production
-const BASE_URL = "https://backend-fastapi-hqw6.onrender.com";
+//const BASE_URL = "https://backend-fastapi-hqw6.onrender.com";
 
 export default axios.create({
     baseURL: BASE_URL
