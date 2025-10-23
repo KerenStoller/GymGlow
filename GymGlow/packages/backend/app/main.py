@@ -12,7 +12,11 @@ app = FastAPI(title="GymGlow API",
 # Allow local frontend to use cookies (HttpOnly JWT) with cross-origin requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://frontend-react-csa1.onrender.com"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],)
