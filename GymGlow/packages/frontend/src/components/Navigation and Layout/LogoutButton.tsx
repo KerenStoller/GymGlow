@@ -11,7 +11,6 @@ const LogoutButton = () =>
 
     useEffect(() => {
         setLoggedIn(accessToken !== "");
-        console.log("im in logout button effect!")
     }, [accessToken])
 
     return (

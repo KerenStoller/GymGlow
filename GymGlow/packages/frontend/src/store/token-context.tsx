@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useMemo } from 'react';
 import ExpiredRefresh from "../components/Token/ExpiredRefreshModal.tsx";
 
 type TokenContextType = {
@@ -15,14 +15,20 @@ export const TokenContext = createContext<TokenContextType>({
     setGotRefresh: () => {},
 });
 
-const TokenContextProvider : React.FC<React.PropsWithChildren<{}>> = ({ children }) =>
-{
+const TokenContextProvider : React.FC<React.PropsWithChildren<{}>> = ({ children }) => {
     const [accessToken, setAccess] = useState('');
     const [gotRefresh, setGotRefresh] = useState(false);
 
+    const contextValue = useMemo(() => ({
+        accessToken,
+        setAccess,
+        gotRefresh,
+        setGotRefresh,
+    }), [accessToken, gotRefresh]);
+
 
     return (
-        <TokenContext.Provider value={{accessToken, setAccess, gotRefresh, setGotRefresh}}>
+        <TokenContext.Provider value={contextValue}>
             {!gotRefresh && accessToken !== '' && <ExpiredRefresh />}
             {children}
         </TokenContext.Provider>)
