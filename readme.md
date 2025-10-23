@@ -8,7 +8,7 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 ## Tech Stack
 - **Backend:** FastAPI running in Python 3.11 virtual environment (`packages/backend/venv`), served by Uvicorn.
 - **Frontend:** React (Vite + TypeScript) app running on Node 18+ via pnpm (`packages/frontend`).
-- **Authentication:** JWT with refresh tokens
+- **Authentication:** JWT with refresh tokens cookies
 
 ---
 
