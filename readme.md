@@ -12,7 +12,28 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 
 ---
 
-## Getting Started
+## First‑time Setup
+
+### Backend
+
+```bash
+cd packages/backend
+python3.11 -m venv venv
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt  # install all backend dependencies
+```
+
+### Frontend
+
+```bash
+cd packages/frontend
+pnpm install
+```
+
+---
+
+## Running The App
 
 1. **Open Terminal** and go to the root folder:
 
@@ -32,27 +53,6 @@ pnpm -r --parallel dev
 
 - API docs: [http://localhost:8000/docs](http://localhost:8000/docs)
 - Frontend app: [http://localhost:5173](http://localhost:5173)
-
----
-
-## First‑time Setup
-
-### Backend
-
-```bash
-cd packages/backend
-python3.11 -m venv venv
-source venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt  # install all backend dependencies
-```
-
-### Frontend
-
-```bash
-cd packages/frontend
-pnpm install
-```
 
 ---
 
