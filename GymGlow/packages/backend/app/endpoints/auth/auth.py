@@ -20,7 +20,7 @@ async def signup(user_data: UserSignup, db: Session = Depends(get_db)):
     access_token, refresh_token = create_tokens(db, user.name, user.id)
     response_content = AuthResponse(access_token=access_token)
     response = JSONResponse(content=response_content.model_dump())
-    response.set_cookie(key="refresh_token", value=refresh_token)
+    response.set_cookie(key="refresh_token", value=refresh_token, samesite="none")
     return response
 
 
@@ -33,7 +33,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = 
     access_token, refresh_token = create_tokens(db, user.name, user.id)
     response_content = AuthResponse(access_token=access_token)
     response = JSONResponse(content=response_content.model_dump())
-    response.set_cookie(key="refresh_token", value=refresh_token)
+    response.set_cookie(key="refresh_token", value=refresh_token, samesite="none")
     return response
 
 
