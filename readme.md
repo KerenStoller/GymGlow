@@ -14,21 +14,21 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 
 ## First‑time Setup
 
-### Backend
+### 1. Install Node Dependencies (Frontend & Workspace)
+From the root folder, run:
+```bash
+pnpm install
+```
+*This uses `pnpm-workspace.yaml` to install dependencies for all packages.*
+
+### 2. Setup Backend (Python)
 
 ```bash
 cd packages/backend
 python3.11 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt  # install all backend dependencies
-```
-
-### Frontend
-
-```bash
-cd packages/frontend
-pnpm install
+pip install -r requirements.txt
 ```
 
 ---
