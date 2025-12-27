@@ -35,11 +35,7 @@ pnpm install
 
 ## Running The App
 
-1. **Open Terminal** and go to the root folder:
-
-```bash
-cd GymGlowProject/GymGlow
-```
+1. **Open Terminal** in the root folder.
 
 2. **Run both backend and frontend together:**
 

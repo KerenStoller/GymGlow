@@ -8,12 +8,14 @@ class WorkoutPlanSchema(BaseModel):
     title: str
     description: str
 
-    class Config:
-        orm_mode = True
+    model_config = {
+        'from_attributes': True
+    }
 
 class WorkoutPlanCreateSchema(BaseModel):
     title: str
     description: str
     exercises: list[WorkoutExerciseCreateSchema]
-    class Config:
-        orm_mode = True
+    model_config = {
+        'from_attributes': True
+    }
