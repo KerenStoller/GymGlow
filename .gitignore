@@ -17,3 +17,20 @@ build
 .vscode/
 .DS_Store
 *.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+!.env.example
+
+# Docker
+docker-compose.override.yml
+
+# Kubernetes secrets (when i create)
+k8s/*secret*.yaml
+k8s/*Secret*.yaml
+
+# Antigravity
+.gemini/

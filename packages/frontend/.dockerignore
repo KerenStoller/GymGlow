@@ -1,0 +1,6 @@
+node_modules
+dist
+.git
+.gitignore
+.env
+# tells docker build which files not to copy

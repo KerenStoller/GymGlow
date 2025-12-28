@@ -5,7 +5,7 @@
 - **Architecture:** Monorepo
 - **Frontend:** React (Vite) (Located in `packages/frontend`)
 - **Backend:** Python (FastAPI) (Located in `packages/backend`)
-- **Database:** SQLite (Currently local file)
+- **Database:** PostgreSQL (Migrating from SQLite)
 - **Environment:** Mac M1 (Apple Silicon) - requires `linux/amd64` flags for external compatibility.
 
 ## Current Progress (Updated Manually)

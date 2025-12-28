@@ -1,0 +1,41 @@
+services:
+  # we are creating 3 services: db, backend, frontend
+
+  # 1. Postgres database service
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=gymglow
+    ports:
+      - "5432:5432"
+
+  # 2. Backend service
+  backend:
+    build:
+      context: ./packages/backend
+      dockerfile: Dockerfile
+    volumes: # allow live code updates
+      - ./packages/backend:/app
+    ports:
+      - "8000:8000"
+    environment: # tells backend how to connect to db
+      - DATABASE_URL=postgresql://user:password@db:5432/gymglow
+    depends_on: # ensure db starts before backend
+      - db
+
+  # 3. Frontend service
+  frontend:
+    build:
+      context: ./packages/frontend
+      dockerfile: Dockerfile
+    ports: # forward port 80 in container to 5173 on host
+      - "5173:80"
+    depends_on: # start backend before frontend
+      - backend
+
+volumes:
+  postgres_data:
