@@ -9,6 +9,11 @@ app = FastAPI(title="GymGlow API",
     description="Backend API for GymGlow monorepo",
     version="1.0.0")
 
+# Health check endpoint for liveness and readiness probes
+@app.get("/health")
+def health_check():
+    return {"status": "ok"}
+
 # Allow local frontend to use cookies (HttpOnly JWT) with cross-origin requests
 app.add_middleware(
     CORSMiddleware,

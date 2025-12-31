@@ -17,7 +17,7 @@
 - [x] **Week 5**: Volumes and Persistent Storage
 - [x] **Week 6**: StatefulSets and Advanced Controllers
 - [x] **Week 7**: Resources & Kustomize
-- [ ] **Week 8**: Probes, Monitoring and Logging
+- [x] **Week 8**: Probes, Monitoring and Logging
 - [ ] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
 - [ ] **Week 10**: Kubernetes Ingress and TLS
 - [ ] **Week 11**: Security and RBAC
