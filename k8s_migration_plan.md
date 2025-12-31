@@ -16,7 +16,7 @@
 - [x] **Week 4**: Services, Networking, ConfigMaps and Secrets
 - [x] **Week 5**: Volumes and Persistent Storage
 - [x] **Week 6**: StatefulSets and Advanced Controllers
-- [ ] **Week 7**: Resources & Kustomize
+- [x] **Week 7**: Resources & Kustomize
 - [ ] **Week 8**: Probes, Monitoring and Logging
 - [ ] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
 - [ ] **Week 10**: Kubernetes Ingress and TLS
@@ -47,6 +47,10 @@
 ### 3. Database Race Conditions
 - **Issue**: 2 Backend replicas starting simultaneously tried to create the same tables.
 - **Fix**: InitContainers wait for DB, but we also ensure idempotent migrations or scale to 1 replica for initial setup.
+
+### 4. Persistence vs. Backups
+- **StatefulSet (PVC)**: "Save Button". Protects against **Pod failures**. If the pod restarts, the data is still there. But if you run `DROP TABLE`, that deletion is persisted immediately.
+- **Backups (CronJob)**: "Undo Button" / "Disaster Recovery". Protects against **User errors** or **Disk failures**. If you accidentally delete data, you can restore from last night's backup.
 
 ## Rules for AI
 1. **Monorepo Awareness:** Build contexts must be specified

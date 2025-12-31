@@ -1,0 +1,38 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../base
+
+patches:
+# 1. Merge the StatefulSet fields (serviceName, volumeClaimTemplates)
+- path: statefulset-db.yaml
+  target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: db
+
+# 2. Fix the Object to be a valid StatefulSet (Change Kind, Remove manual volumes)
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: db
+  patch: |-
+    - op: replace
+      path: /kind
+      value: StatefulSet
+    - op: remove
+      path: /spec/template/spec/volumes
+
+# 3. Make Service Headless
+- target:
+    kind: Service
+    name: db-service
+  patch: |-
+    - op: replace
+      path: /spec/clusterIP
+      value: None
+    - op: remove
+      path: /spec/type
