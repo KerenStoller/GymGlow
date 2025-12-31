@@ -52,6 +52,11 @@
 - **StatefulSet (PVC)**: "Save Button". Protects against **Pod failures**. If the pod restarts, the data is still there. But if you run `DROP TABLE`, that deletion is persisted immediately.
 - **Backups (CronJob)**: "Undo Button" / "Disaster Recovery". Protects against **User errors** or **Disk failures**. If you accidentally delete data, you can restore from last night's backup.
 
+### 5. Kustomize Workflow
+- **The "Onion" Model**: Kustomize builds the final manifest layer by layer.
+- **Single Command**: You do *not* apply layers individually. You run `kubectl apply -k k8s/overlays/hpa`, and Kustomize automatically loads the Base, applies all intermediate overlays/patches, and sends the final result to Kubernetes.
+- **"Apply the Leaf"**: You never touch the base or intermediate layers directly. You just apply the "leaf" (the specific overlay you want), and Kustomize handles the whole tree. 🌱
+
 ## Rules for AI
 1. **Monorepo Awareness:** Build contexts must be specified
 2. **Incremental Changes:** Only apply concepts from current week
