@@ -13,9 +13,9 @@
 - [x] **Week 1**: Pods
 - [x] **Week 2**: No HW
 - [x] **Week 3**: ReplicaSets, Deployments and DaemonSets 
-- [ ] **Week 4**: Services, Networking, ConfigMaps and Secrets
-- [ ] **Week 5**: Volumes and Persistent Storage
-- [ ] **Week 6**: StatefulSets and Advanced Controllers
+- [x] **Week 4**: Services, Networking, ConfigMaps and Secrets
+- [x] **Week 5**: Volumes and Persistent Storage
+- [x] **Week 6**: StatefulSets and Advanced Controllers
 - [ ] **Week 7**: Resources & Kustomize
 - [ ] **Week 8**: Probes, Monitoring and Logging
 - [ ] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
