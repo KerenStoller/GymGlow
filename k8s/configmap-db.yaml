@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config
+data:
+  POSTGRES_DB: "gymglow"
+  POSTGRES_HOST: "db-service"
+  POSTGRES_USER: "user"
