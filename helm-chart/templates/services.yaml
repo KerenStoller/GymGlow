@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gymglow.fullname" . }}-backend
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  type: NodePort # Hardcoded
+  ports:
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "gymglow.fullname" . }}-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gymglow.fullname" . }}-{{ .Values.names.frontendService }}
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  type: LoadBalancer # Hardcoded
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "gymglow.fullname" . }}-{{ .Values.names.frontend }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gymglow.fullname" . }}-{{ .Values.names.mariadbService }}
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  clusterIP: None # Hardcoded
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
+      name: postgres
+  selector:
+    app: {{ include "gymglow.fullname" . }}-{{ .Values.names.mariadb }}

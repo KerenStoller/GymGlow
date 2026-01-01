@@ -18,7 +18,7 @@
 - [x] **Week 6**: StatefulSets and Advanced Controllers
 - [x] **Week 7**: Resources & Kustomize
 - [x] **Week 8**: Probes, Monitoring and Logging
-- [ ] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
+- [x] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
 - [ ] **Week 10**: Kubernetes Ingress and TLS
 - [ ] **Week 11**: Security and RBAC
 - [ ] **Week 12**: CI/CD Integration
@@ -56,6 +56,18 @@
 - **The "Onion" Model**: Kustomize builds the final manifest layer by layer.
 - **Single Command**: You do *not* apply layers individually. You run `kubectl apply -k k8s/overlays/hpa`, and Kustomize automatically loads the Base, applies all intermediate overlays/patches, and sends the final result to Kubernetes.
 - **"Apply the Leaf"**: You never touch the base or intermediate layers directly. You just apply the "leaf" (the specific overlay you want), and Kustomize handles the whole tree. 🌱
+
+### 6. Helm vs Kustomize
+- **Kustomize (Overlay)**: *The Artist*. You start with a finished painting (Base) and paint over it (Overlay). "Patching" logic.
+- **Helm (Template)**: *The "Frame with Holes"*. Helm provides a structure (the frame/template) with empty slots ("holes"). The user fills those holes with the values they want. 🖼️
+
+### 6. Helm vs Kustomize
+- **Kustomize (Overlay)**: *The Artist*. You start with a finished painting (Base) and paint over it (Overlay). "Patching" logic.
+- **Helm (Template)**: *The "Frame with Holes"*. Helm provides a structure (the frame/template) with empty slots ("holes"). The user fills those holes with the values they want. 🖼️
+
+### 6. Helm vs Kustomize
+- **Kustomize (Overlay)**: *The Artist*. You start with a finished painting (Base) and paint over it (Overlay). "Patching" logic. Built into Kubernetes.
+- **Helm (Template)**: *The Chef*. You follow a recipe (Template) and change the ingredients (Values). "Generation" logic. It's a Package Manager (like `npm` or `brew`) that handles installation, upgrades, and rollbacks.
 
 ## Rules for AI
 1. **Monorepo Awareness:** Build contexts must be specified
