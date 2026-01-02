@@ -105,3 +105,10 @@ LoadBalancer         ClusterIP Service         ClusterIP Service
 ```
 
 **Key Point**: For grading, Frontend and Database match HW requirements exactly. Backend is our value-add for a complete full-stack app.
+
+### 9. Ingress & macOS/Minikube Limitations (Week 10) 🚧
+- **The Problem**: On macOS (Docker Driver), `minikube tunnel` binds all LoadBalancer Services to the host's single `127.0.0.1` IP.
+- **The Conflict**: If `frontend-service` (LoadBalancer) and `traefik` (Ingress Controller LoadBalancer) both try to claim port 80 on `127.0.0.1`, one will fail or hijack traffic.
+- **The Fix**:
+    - **Cloud/Production**: Both can be `LoadBalancer` (they get different external IPs).
+    - **Local/Minikube**: Downgrade `frontend-service` to `ClusterIP`. This forces all `localhost` traffic to go through the Ingress Controller (Traefik), ensuring properly routed traffic and avoiding the "405 Method Not Allowed" error.
