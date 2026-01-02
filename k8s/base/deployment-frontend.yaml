@@ -18,6 +18,6 @@ spec:
         command: ['sh', '-c', 'until nc -z backend-service 8000; do echo waiting for backend; sleep 2; done']
       containers:
       - name: frontend
-        image: ghcr.io/kerenstoller/gymglow-frontend:1.0
+        image: ghcr.io/kerenstoller/gymglow-frontend:1.4
         ports:
         - containerPort: 80

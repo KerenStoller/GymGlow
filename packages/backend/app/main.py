@@ -7,7 +7,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="GymGlow API",
     description="Backend API for GymGlow monorepo",
-    version="1.0.0")
+    version="1.0.0",
+    root_path="/api")
 
 # Health check endpoint for liveness and readiness probes
 @app.get("/health")
@@ -17,7 +18,8 @@ def health_check():
 # Allow local frontend to use cookies (HttpOnly JWT) with cross-origin requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex="https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    # allow_origin_regex="https?://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_origin_regex=".*", # Allow all origins for Cloud IP access
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],)

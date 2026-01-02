@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "gymglow.labels" . | nindent 4 }}
 spec:
-  type: NodePort # Hardcoded
+  type: {{ .Values.backend.service.type }}
   ports:
     - port: 8000
       targetPort: 8000
@@ -21,7 +21,7 @@ metadata:
   labels:
     {{- include "gymglow.labels" . | nindent 4 }}
 spec:
-  type: LoadBalancer # Hardcoded
+  type: {{ .Values.frontend.service.type }}
   ports:
     - port: 80
       targetPort: 80

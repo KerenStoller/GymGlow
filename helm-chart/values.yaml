@@ -5,7 +5,7 @@ replicaCount: 2
 
 image:
   repository: ghcr.io/kerenstoller/gymglow-backend
-  tag: "1.1" # Adapted to GymGlow
+  tag: "1.3" # Updated for CORS Fix
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -20,3 +20,11 @@ names:
   frontendService: "frontend-service" # Explicit service name from HW example might imply separating them
   mariadb: "db" # Using 'db' to match our postgres, though key is mariadb
   mariadbService: "db-service"
+
+backend:
+  service:
+    type: NodePort
+
+frontend:
+  service:
+    type: LoadBalancer

@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-// For local development
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
-
-// For production
-//const BASE_URL = "https://backend-fastapi-hqw6.onrender.com";
+// Use relative path "/api" for Ingress/Production/Universal.
+// For pure local dev (no Ingress), VITE_API_URL can be injected to override.
+const BASE_URL = import.meta.env.VITE_API_URL || "/api";
 
 export default axios.create({
     baseURL: BASE_URL
