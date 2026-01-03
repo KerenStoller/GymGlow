@@ -8,7 +8,8 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-  - http:
+  - host: gymglow.local
+    http:
       paths:
       - path: /api
         pathType: Prefix

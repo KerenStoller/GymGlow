@@ -9,13 +9,13 @@ spec:
       - name: backend
         livenessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10
         readinessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 8000
           initialDelaySeconds: 5
           periodSeconds: 10

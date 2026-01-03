@@ -1,6 +1,6 @@
 apiVersion: v2
 name: gymglow
-description: A Helm chart for GymGlow application
+description: A Helm chart for GymGlow application. Supports multiple installations on the same cluster by using dynamic release names.
 type: application
-version: 0.1.6
+version: 0.1.7
 appVersion: "1.1"

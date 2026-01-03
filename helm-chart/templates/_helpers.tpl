@@ -9,6 +9,7 @@ Expand the name of the chart.
 Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
+This ensures uniqueness for multiple installations on the same cluster (e.g. 'prod-gymglow', 'dev-gymglow').
 */}}
 {{- define "gymglow.fullname" -}}
 {{- if .Values.fullnameOverride }}

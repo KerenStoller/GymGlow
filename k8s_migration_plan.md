@@ -112,3 +112,16 @@ LoadBalancer         ClusterIP Service         ClusterIP Service
 - **The Fix**:
     - **Cloud/Production**: Both can be `LoadBalancer` (they get different external IPs).
     - **Local/Minikube**: Downgrade `frontend-service` to `ClusterIP`. This forces all `localhost` traffic to go through the Ingress Controller (Traefik), ensuring properly routed traffic and avoiding the "405 Method Not Allowed" error.
+
+### 10. The "Hidden" Probe Issue (Week 10) 🕵️‍♀️
+- **Scenario**: We updated the Ingress to route `/api` -> Backend, and updated the Backend code to handle the `/api` prefix.
+- **The Bug**: The browser returned `404 Not Found` or `503 Service Unavailable`, even though the code was correct.
+- **The Cause**: Kubernetes **Liveness/Readiness Probes** were still checking `/health`. Since the app moved to `/api/health`, the probes failed (404), causing Kubernetes to kill the pods and stop sending traffic.
+- **The Fix**: Always update `livenessProbe` and `readinessProbe` paths in your Deployment/Kustomize overlays when changing application routes.
+
+### 11. Ingress Controller Mismatch (Week 10) ⚠️
+- **Issue**: The `ingress.yaml` specified `ingressClassName: traefik`, but the cluster had the default Minikube Nginx controller enabled (`minikube addons enable ingress`).
+- **Result**: The Ingress resource was ignored, and routes were not created.
+- **Resolution**:
+    1.  **Check Enabled Controller**: Run `minikube addons list` or `kubectl get pods -A | grep ingress`.
+    2.  **Align Configuration**: Either change YAML to `ingressClassName: nginx` OR disable Nginx (`minikube addons disable ingress`) and install Traefik via Helm (as per course requirements).

@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "gymglow.fullname" . }}-backend
+  name: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
   labels:
     {{- include "gymglow.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ include "gymglow.fullname" . }}-backend
+      app: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
   template:
     metadata:
       labels:
-        app: {{ include "gymglow.fullname" . }}-backend
+        app: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -56,13 +56,13 @@ spec:
               value: postgresql://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_HOST):5432/$(POSTGRES_DB)
           livenessProbe:
             httpGet:
-              path: /health
+              path: /api/health
               port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /health
+              path: /api/health
               port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10

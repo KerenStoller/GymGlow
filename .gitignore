@@ -18,6 +18,9 @@ build
 .DS_Store
 *.db
 
+# Helm
+*.tgz
+
 # Environment variables
 .env
 .env.local

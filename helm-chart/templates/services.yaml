@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "gymglow.fullname" . }}-backend
+  name: {{ include "gymglow.fullname" . }}-{{ .Values.names.backendService }}
   labels:
     {{- include "gymglow.labels" . | nindent 4 }}
 spec:
@@ -12,7 +12,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: {{ include "gymglow.fullname" . }}-backend
+    app: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
 ---
 apiVersion: v1
 kind: Service
