@@ -123,5 +123,6 @@ LoadBalancer         ClusterIP Service         ClusterIP Service
 - **Issue**: The `ingress.yaml` specified `ingressClassName: traefik`, but the cluster had the default Minikube Nginx controller enabled (`minikube addons enable ingress`).
 - **Result**: The Ingress resource was ignored, and routes were not created.
 - **Resolution**:
-    1.  **Check Enabled Controller**: Run `minikube addons list` or `kubectl get pods -A | grep ingress`.
-    2.  **Align Configuration**: Either change YAML to `ingressClassName: nginx` OR disable Nginx (`minikube addons disable ingress`) and install Traefik via Helm (as per course requirements).
+    1.  **Disable Nginx**: Run `minikube addons disable ingress`.
+    2.  **Install Traefik**: Install Traefik via Helm (as per course requirements).
+    3.  **Verify**: Ensure `kubectl get ingress` shows the `ADDRESS` assigned by Traefik.
