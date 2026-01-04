@@ -1,0 +1,30 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "gymglow.fullname" . }}-ingress
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+  - {{ if .Values.ingress.host }}host: {{ .Values.ingress.host }}{{ end }}
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "gymglow.fullname" . }}-{{ .Values.names.backendService }}
+            port:
+              number: 8000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "gymglow.fullname" . }}-{{ .Values.names.frontendService }}
+            port:
+              number: 80
+{{- end }}

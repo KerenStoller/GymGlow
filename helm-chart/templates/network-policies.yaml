@@ -1,0 +1,74 @@
+{{- if .Values.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gymglow.fullname" . }}-default-deny-all
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gymglow.fullname" . }}-allow-frontend-ingress
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "gymglow.fullname" . }}-{{ .Values.names.frontend }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gymglow.fullname" . }}-allow-backend-from-frontend
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: {{ include "gymglow.fullname" . }}-{{ .Values.names.frontend }}
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 8000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "gymglow.fullname" . }}-allow-db-from-backend
+  labels:
+    {{- include "gymglow.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "gymglow.fullname" . }}-{{ .Values.names.mariadb }}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: {{ include "gymglow.fullname" . }}-{{ .Values.names.backend }}
+    ports:
+    - protocol: TCP
+      port: 5432
+{{- end }}
