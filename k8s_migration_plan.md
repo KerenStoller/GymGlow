@@ -126,3 +126,25 @@ LoadBalancer         ClusterIP Service         ClusterIP Service
     1.  **Disable Nginx**: Run `minikube addons disable ingress`.
     2.  **Install Traefik**: Install Traefik via Helm (as per course requirements).
     3.  **Verify**: Ensure `kubectl get ingress` shows the `ADDRESS` assigned by Traefik.
+
+### 12. Cloud Cost & Data Persistence Strategy (Post-Lecture) 💾
+To stop the app on Cloud (save money) but **keep the data** for the next session:
+
+**Option A: Pause (Recommended)**
+Scale everything to 0. You pay for disk storage but not compute.
+```bash
+kubectl scale deployment prod-gymglow-backend --replicas=0
+kubectl scale deployment prod-gymglow-frontend --replicas=0
+kubectl scale statefulset prod-gymglow-db --replicas=0
+```
+
+**Option B: Uninstall (Deep Freeze)**
+1.  **Protect Data**: Change ReclaimPolicy to `Retain` so the disk isn't deleted with the PVC.
+    ```bash
+    # Find your PV name
+    kubectl get pv
+    # Patch it (replace pvc-xxxx with your actual PV name)
+    kubectl patch pv pvc-38aabf95-ce94-4b8c-9af4-cf67153bd6d1 -p '{"spec":{"persistentVolumeReclaimPolicy":"Retain"}}'
+    ```
+2.  **Uninstall**: `helm uninstall prod`
+3.  **Restore**: When reinstalling, you'll need to manually bind the new PVC to this old PV.
