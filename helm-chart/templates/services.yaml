@@ -37,7 +37,7 @@ metadata:
   labels:
     {{- include "gymglow.labels" . | nindent 4 }}
 spec:
-  clusterIP: None # Hardcoded
+  clusterIP: None # Headless service for statefulset
   ports:
     - port: 5432
       targetPort: 5432

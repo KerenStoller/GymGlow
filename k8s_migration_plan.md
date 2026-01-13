@@ -19,9 +19,9 @@
 - [x] **Week 7**: Resources & Kustomize
 - [x] **Week 8**: Probes, Monitoring and Logging
 - [x] **Week 9**: Helm, Cloud (Azure, GCP, AWS)
-- [ ] **Week 10**: Kubernetes Ingress and TLS
-- [ ] **Week 11**: Security and RBAC
-- [ ] **Week 12**: CI/CD Integration
+- [x] **Week 10**: Kubernetes Ingress and TLS
+- [x] **Week 11**: Security and RBAC (No HW)
+- [x] **Week 12**: CKAD Exam Mockup
 - [ ] **Week 13**: Capstone Project
 
 ## Completed Work
