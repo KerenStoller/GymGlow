@@ -58,3 +58,10 @@ pnpm -r --parallel dev
 - Always activate the backend venv when installing Python packages, since all Python dependencies for this project are stored there and are currently only used for the backend.
 - For frontend dependencies, use `pnpm add <package>` in `packages/frontend`.
 
+
+___
+
+(K8s Diagram)
+<img width="5092" height="2894" alt="GymGlow" src="https://github.com/user-attachments/assets/306e1119-b66e-407e-bf0f-a42cdfde4173" />
+
+
