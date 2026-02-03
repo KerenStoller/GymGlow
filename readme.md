@@ -14,28 +14,32 @@ This repository is organized as a monorepo containing both the FastAPI backend a
 
 ## First‑time Setup
 
-### 1. Install Node Dependencies (Frontend & Workspace)
-From the root folder, run:
-```bash
-pnpm install
-```
-*This uses `pnpm-workspace.yaml` to install dependencies for all packages.*
-
-### 2. Setup Backend (Python)
+### Backend
 
 ```bash
 cd packages/backend
 python3.11 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements.txt  # install all backend dependencies
+```
+
+### Frontend
+
+```bash
+cd packages/frontend
+pnpm install
 ```
 
 ---
 
 ## Running The App
 
-1. **Open Terminal** in the root folder.
+1. **Open Terminal** and go to the root folder:
+
+```bash
+cd GymGlowProject/GymGlow
+```
 
 2. **Run both backend and frontend together:**
 
@@ -57,11 +61,4 @@ pnpm -r --parallel dev
 - `.gitignore` ignores `venv/` and `node_modules/`.
 - Always activate the backend venv when installing Python packages, since all Python dependencies for this project are stored there and are currently only used for the backend.
 - For frontend dependencies, use `pnpm add <package>` in `packages/frontend`.
-
-
-___
-
-(K8s Diagram)
-<img width="5092" height="2894" alt="GymGlow" src="https://github.com/user-attachments/assets/306e1119-b66e-407e-bf0f-a42cdfde4173" />
-
 
