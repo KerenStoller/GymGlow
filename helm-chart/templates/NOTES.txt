@@ -1,0 +1,7 @@
+To access GymGlow:
+
+1. Run: sudo minikube tunnel
+2. Get the Ingress address: kubectl get ingress
+3. Open: http://<Ingress-ADDRESS>/
+
+To uninstall: helm uninstall <release-name>
